@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="450.0" style="-fx-background-color: #f8f8f8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.studentchestv1001.SceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="450.0" style="-fx-background-color: #f8f8f8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.studentchestv1001.ProfileController">
    <children>
       <HBox layoutX="125.0" layoutY="6.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #8a8a8b;" AnchorPane.bottomAnchor="670.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#switchToMainDisplay" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: #fda285;" textAlignment="CENTER">
+            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#changeToMainDisplay" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: #fda285;" textAlignment="CENTER">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
