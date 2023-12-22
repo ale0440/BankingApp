@@ -1,5 +1,8 @@
 package com.example.studentchestv1001;
 
+import com.example.studentchestv1001.AppState;
+import com.example.studentchestv1001.DatabaseConnection;
+import com.example.studentchestv1001.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,6 +39,8 @@ public class ProfileController {
         LoginController login = AppState.getLoginController();
 
         String query = "select first_name, last_name, phone, email_address from customer where idcustomer = " + login.getId();
+        //String update = String.format() +
+
         try{
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -56,5 +61,19 @@ public class ProfileController {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void updateData(ActionEvent event) throws IOException {
+        DatabaseConnection connectDB = new DatabaseConnection();
+        Connection connectNow = connectDB.getConnection();
+        LoginController login = AppState.getLoginController();
+        try{
+            Statement statement = connectNow.createStatement();
+            String query = String.format("update customer set first_name = '%s', last_name = '%s', phone = '%s', email_address = '%s' where idcustomer = " + login.getId(), txtFirstName.getText(), txtLastName.getText(), txtPhone.getText(), txtEmail.getText());
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            //System.out.println("Failed to update data!");
+            e.printStackTrace();
+        }
     }
 }

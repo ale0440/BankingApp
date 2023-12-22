@@ -32,7 +32,7 @@
             </Label>
          </children>
       </HBox>
-      <VBox layoutX="175.0" layoutY="201.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
+      <VBox alignment="TOP_CENTER" layoutX="175.0" layoutY="201.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
          <children>
             <SplitPane dividerPositions="0.22560975609756098" orientation="VERTICAL" prefHeight="166.0" prefWidth="330.0" style="-fx-background-color: #fda285;">
               <items>
@@ -73,25 +73,22 @@
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </VBox.margin>
             </SplitPane>
-            <Button fx:id="btnSeeCash" layoutX="200.0" mnemonicParsing="false" onAction="#seeBalance" style="-fx-background-color: nuul;" text="See cash">
+            <Button fx:id="btnSeeCash" alignment="CENTER" layoutX="200.0" mnemonicParsing="false" onAction="#seeBalance" style="-fx-background-color: nuul;" text="See cash">
                <font>
                   <Font name="Segoe UI Bold" size="19.0" />
                </font>
                <VBox.margin>
-                  <Insets left="158.0" />
+                  <Insets />
                </VBox.margin>
             </Button>
-            <Label fx:id="lblMoney" text="\$$$">
+            <Label fx:id="lblMoney" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="100.0" text="\$$$" textAlignment="CENTER">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
                </font>
-               <VBox.margin>
-                  <Insets left="190.0" top="3.0" />
-               </VBox.margin>
             </Label>
             <Pane prefHeight="255.0" prefWidth="370.0" style="-fx-background-color: #8a8a8b\;">
                <VBox.margin>
-                  <Insets left="20.0" right="20.0" top="30.0" />
+                  <Insets left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
                <children>
                   <Button fx:id="btnTransfer" layoutX="14.0" layoutY="28.0" mnemonicParsing="false" onAction="#switchToTransfer" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Transfer" textAlignment="CENTER">

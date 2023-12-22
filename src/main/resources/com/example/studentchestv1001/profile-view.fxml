@@ -108,7 +108,7 @@
             </AnchorPane>
             <AnchorPane style="-fx-background-color: #f8c7b8;">
                <children>
-                  <Button fx:id="btnUpdate" layoutX="108.0" layoutY="21.0" mnemonicParsing="false" style="-fx-background-color: #fda285;" text="UPDATE DATA" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                  <Button fx:id="btnUpdate" layoutX="108.0" layoutY="21.0" mnemonicParsing="false" onAction="#updateData" style="-fx-background-color: #fda285;" text="UPDATE DATA" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font name="Segoe UI Bold" size="21.0" />
                      </font>
