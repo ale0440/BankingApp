@@ -44,7 +44,7 @@
             <Font name="Segoe UI Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="btnRequest" layoutX="257.0" layoutY="120.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="150.0" style="-fx-background-color: #f8c7b8;" text="REQUEST" wrapText="true" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="120.0">
+      <Button fx:id="btnRequest" layoutX="257.0" layoutY="120.0" mnemonicParsing="false" onAction="#requestMoneyFrom" prefHeight="105.0" prefWidth="150.0" style="-fx-background-color: #f8c7b8;" text="REQUEST" wrapText="true" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="120.0">
          <font>
             <Font name="Segoe UI Bold" size="25.0" />
          </font>

@@ -14,13 +14,15 @@ import java.sql.Statement;
 
 public class SendMoneyController {
     private String phoneNumber;
+    private int type; // 1 - send, 2 - request
     @FXML
     private TextField txtAmount;
     @FXML
     private TextField txtPayment;
 
-    public void initializeData(String phone) {
+    public void initializeData(String phone, int type) {
         this.phoneNumber = phone;
+        this.type = type;
     }
 
     public void makePayement(ActionEvent event) throws IOException {
@@ -41,8 +43,11 @@ public class SendMoneyController {
             if(resultSet.next()){
                 account2 = resultSet.getInt(1);
             }
-
-            String query = String.format("insert into transfer(account1, account2, type, amount, payment_details) values('%d','%d','send','%f', '%s');", account1, account2, amount, payment);
+            String typeString = "";
+            if(type == 1)
+                typeString = "send";
+            else typeString = "request";
+            String query = String.format("insert into transfer(account1, account2, type, amount, payment_details) values('%d','%d','%s','%f', '%s');", account1, account2, typeString, amount, payment);
             statement.executeUpdate(query);
         }catch (Exception e){
             e.printStackTrace();

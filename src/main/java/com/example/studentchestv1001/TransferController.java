@@ -126,10 +126,28 @@ public class TransferController {
     }
 
     public void sendMoneyTo(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
+        Parent root = loader.load();
+       //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+        AgendaController controller = loader.getController();
+        controller.setType(1);
+    }
+
+    public void requestMoneyFrom(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
+        Parent root = loader.load();
+        //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
+        AgendaController controller = loader.getController();
+        controller.setType(2);
     }
 }

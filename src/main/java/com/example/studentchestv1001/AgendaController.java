@@ -1,6 +1,5 @@
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
-//import com.mysql.cj.jdbc.MysqlSQLXML;
 import com.example.studentchestv1001.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +26,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AgendaController {
+    public int type;
     @FXML
     private VBox vBox;
     @FXML
@@ -34,6 +34,10 @@ public class AgendaController {
     @FXML
     private Button btnSearch;
     private String phoneNumber;
+
+    public void setType(int type){
+        this.type = type;
+    }
     @FXML
     private void initialize(){
         init();
@@ -42,7 +46,8 @@ public class AgendaController {
     private void init(){
         DatabaseConnection connectDB = new DatabaseConnection();
         Connection connectNow = connectDB.getConnection();
-        String query = "select first_name, last_name, phone from customer;";
+        LoginController login = AppState.getLoginController();
+        String query = "select first_name, last_name, phone, idcustomer from customer;";
 
         try{
             Statement statement = connectNow.createStatement();
@@ -50,7 +55,8 @@ public class AgendaController {
 
             while(resultSet.next()){
                 String info = resultSet.getString(1) + " " + resultSet.getString(2) + "\n" + resultSet.getString(3);
-                addButtonToVBox(info, resultSet.getString(3));
+                if(resultSet.getInt(4) != login.getId())
+                    addButtonToVBox(info, resultSet.getString(3));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -97,7 +103,7 @@ public class AgendaController {
         stage.show();
 
         SendMoneyController sendMoneyController = loader.getController();
-        sendMoneyController.initializeData(phone);
+        sendMoneyController.initializeData(phone, type);
     }
 
     public void switchToTransfer(ActionEvent event) throws IOException {
