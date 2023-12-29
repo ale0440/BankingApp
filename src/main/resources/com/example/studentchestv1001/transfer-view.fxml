@@ -39,7 +39,7 @@
             </Label>
          </children>
       </HBox>
-      <Button fx:id="btnSend" layoutX="99.0" layoutY="143.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="150.0" style="-fx-background-color: #f8c7b8;" text="SEND" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="120.0">
+      <Button fx:id="btnSend" layoutX="99.0" layoutY="143.0" mnemonicParsing="false" onAction="#sendMoneyTo" prefHeight="105.0" prefWidth="150.0" style="-fx-background-color: #f8c7b8;" text="SEND" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="120.0">
          <font>
             <Font name="Segoe UI Bold" size="25.0" />
          </font>

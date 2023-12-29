@@ -116,4 +116,12 @@ public class TransferController {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void sendMoneyTo(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }
