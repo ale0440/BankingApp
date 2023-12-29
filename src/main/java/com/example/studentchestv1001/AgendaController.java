@@ -1,4 +1,5 @@
 import com.example.studentchestv1001.DatabaseConnection;
+//import com.mysql.cj.jdbc.MysqlSQLXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -53,7 +55,7 @@ public class AgendaController {
 
     private void addButtonToVBox(String info){
         Button button = new Button();
-        button.setMnemonicParsing(false);
+
         Label label = new Label(info);
         label.setAlignment(Pos.CENTER);
         label.setContentDisplay(ContentDisplay.CENTER);
@@ -63,9 +65,43 @@ public class AgendaController {
         label.setMaxHeight(70);
         label.setTextAlignment(TextAlignment.CENTER);
         label.setFont(Font.font("Segoe UI Bold", 20));
+
+        button.setMnemonicParsing(false);
         button.setGraphic(label);
+        button.setOnAction(e -> {
+            try {
+                paymentDetails();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         vBox.setMargin(button, new Insets(10,0,0,0));
         vBox.getChildren().add(button);
+    }
+
+    @FXML
+    private void paymentDetails() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/send-money-view.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        //APPLICATION MODAL means you cannot interact with other window until this new window is closed
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+    }
+
+    public void makePayement(ActionEvent event) throws IOException {
+        //update the database
+
+        /*
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/main-display-view.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
+         */
     }
 
     public void switchToTransfer(ActionEvent event) throws IOException {
