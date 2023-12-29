@@ -44,12 +44,27 @@
          <children>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <TextField prefWidth="250.0">
+                  <Button fx:id="btnShowAgenda" mnemonicParsing="false" onAction="#showAgenda" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
+                     <font>
+                        <Font name="Segoe UI" size="15.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="" size="30" text="">
+                           <font>
+                              <Font name="FontAwesome" size="12.0" />
+                           </font>
+                        </FontAwesomeIconView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <TextField fx:id="txtSearch" prefWidth="250.0">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="btnBack1" mnemonicParsing="false" onAction="#switchToTransfer" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
+                  <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI" size="15.0" />
                      </font>
@@ -65,33 +80,7 @@
             </HBox>
             <ScrollPane hbarPolicy="NEVER" prefHeight="570.0" prefWidth="200.0" vbarPolicy="ALWAYS">
                <content>
-                  <VBox alignment="TOP_CENTER" prefHeight="570.0" prefWidth="410.0">
-                     <children>
-                        <Button mnemonicParsing="false">
-                           <graphic>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" text="Alecsia Coman&#10;0729722687" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Segoe UI Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                           </graphic>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button mnemonicParsing="false">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                           <graphic>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="300.0" text="Alecsia Coman&#10;0729722687" textAlignment="CENTER">
-                                 <font>
-                                    <Font name="Segoe UI Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                           </graphic>
-                        </Button>
-                     </children>
+                  <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="570.0" prefWidth="410.0">
                      <padding>
                         <Insets bottom="5.0" top="5.0" />
                      </padding>
