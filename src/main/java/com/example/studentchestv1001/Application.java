@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("transfer-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/login-view.fxml"));
         Scene scene = new Scene(root,450,730);
         stage.setTitle("StudentChest - Banking App");
         stage.setScene(scene);

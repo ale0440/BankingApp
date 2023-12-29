@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -36,7 +37,7 @@ public class TransferController {
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
 
-        String query = "select account1, account2, type, amount from transfer";
+        String query = "select account1, account2, type, amount, payment_details from transfer;";
 
         try{
             Statement statement = connectNow.createStatement();
@@ -44,7 +45,7 @@ public class TransferController {
             String labelText = "";
             while(queryResult.next()){
                 labelText = "";
-                if(queryResult.getInt(1) == 1){
+                if(queryResult.getInt(1) == login.getId()){
                     //if account1 is the logged in user's id => add a label to the anchor pane with the
                     //message: "You sent/requested $$ to account2's card name"
 
@@ -72,8 +73,9 @@ public class TransferController {
                     labelText += name;
                     statement1.close();
                     queryResult1.close();
+                    addLabel(labelText, queryResult.getString(5));
                 }
-                else if(queryResult.getInt(2) == 1){
+                else if(queryResult.getInt(2) == login.getId()){
                     //if account2 is the logged in user's id => add a label to the anchor pane with the
                     //message: "account1's name sent you $$"
                     String queryName = "select first_name, last_name from customer c join account a on a.idcustomer = c.idcustomer join transfer t on t.account1 = a.idaccount where t.account1 = '"+ queryResult.getInt(1) +"'";
@@ -86,22 +88,8 @@ public class TransferController {
                     labelText += name + " sent you " + queryResult.getDouble(4);
                     statement1.close();
                     queryResult1.close();
+                    addLabel(labelText, queryResult.getString(5));
                 }
-
-                //creating the new label
-                Label label = new Label(labelText);
-                label.setTextFill(Color.WHITE);
-                label.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-                label.setStyle("-fx-background-color:  #c9c9c9;");
-                label.setWrapText(true);
-                vBox.setMargin(label, new Insets(10,10,0,10));
-                label.setPadding(new Insets(5,10,5,10));
-                label.setMinHeight(60);
-                label.setPrefHeight(60);
-                label.setMaxHeight(60);
-                label.setPrefWidth(315);
-
-                vBox.getChildren().add(label);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -109,8 +97,28 @@ public class TransferController {
         }
     }
 
+    private void addLabel(String labelText, String paymentDetails){
+
+        //creating the new label
+        Label label = new Label(labelText);
+        label.setTextFill(Color.WHITE);
+        label.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+        label.setStyle("-fx-background-color:  #c9c9c9;");
+        label.setWrapText(true);
+        vBox.setMargin(label, new Insets(10,10,0,10));
+        label.setPadding(new Insets(5,10,5,10));
+        label.setMinHeight(60);
+        label.setPrefHeight(60);
+        label.setMaxHeight(60);
+        label.setPrefWidth(315);
+
+        Tooltip tooltip = new Tooltip(paymentDetails);
+        Tooltip.install(label,tooltip);
+
+        vBox.getChildren().add(label);
+    }
     public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("main-display-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);

@@ -1,5 +1,7 @@
+import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 //import com.mysql.cj.jdbc.MysqlSQLXML;
+import com.example.studentchestv1001.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AgendaController {
@@ -30,6 +33,7 @@ public class AgendaController {
     private TextField txtSearch;
     @FXML
     private Button btnSearch;
+    private String phoneNumber;
     @FXML
     private void initialize(){
         init();
@@ -46,14 +50,14 @@ public class AgendaController {
 
             while(resultSet.next()){
                 String info = resultSet.getString(1) + " " + resultSet.getString(2) + "\n" + resultSet.getString(3);
-                addButtonToVBox(info);
+                addButtonToVBox(info, resultSet.getString(3));
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private void addButtonToVBox(String info){
+    private void addButtonToVBox(String info, String phone){
         Button button = new Button();
 
         Label label = new Label(info);
@@ -70,7 +74,7 @@ public class AgendaController {
         button.setGraphic(label);
         button.setOnAction(e -> {
             try {
-                paymentDetails();
+                paymentDetails(phone);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -81,27 +85,19 @@ public class AgendaController {
     }
 
     @FXML
-    private void paymentDetails() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/send-money-view.fxml"));
+    private void paymentDetails(String phone) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/studentchestv1001/send-money-view.fxml"));
+        Parent root = loader.load();
+        //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/send-money-view.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         //APPLICATION MODAL means you cannot interact with other window until this new window is closed
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
-    }
 
-    public void makePayement(ActionEvent event) throws IOException {
-        //update the database
-
-        /*
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/main-display-view.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
-         */
+        SendMoneyController sendMoneyController = loader.getController();
+        sendMoneyController.initializeData(phone);
     }
 
     public void switchToTransfer(ActionEvent event) throws IOException {
@@ -134,7 +130,7 @@ public class AgendaController {
                     //display that person
 
                     info += "\n" + resultSet.getString(3);
-                    addButtonToVBox(info);
+                    addButtonToVBox(info, resultSet.getString(3));
                 }
             }
         }catch (Exception e){

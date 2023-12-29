@@ -50,8 +50,6 @@ public class ProfileController {
                 String phone = resultSet.getString("phone");
                 String email = resultSet.getString("email_address");
 
-                System.out.println("Retrieved values: " + firstName + ", " + lastName + ", " + phone + ", " + email);
-
                 if (firstName != null) {
                     txtFirstName.setText(firstName);
                 } else {
@@ -99,7 +97,6 @@ public class ProfileController {
             String query = String.format("update customer set first_name = '%s', last_name = '%s', phone = '%s', email_address = '%s' where idcustomer = " + login.getId(), txtFirstName.getText(), txtLastName.getText(), txtPhone.getText(), txtEmail.getText());
             statement.executeUpdate(query);
         }catch (Exception e){
-            //System.out.println("Failed to update data!");
             e.printStackTrace();
         }
     }
