@@ -45,10 +45,37 @@ public class ProfileController {
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             if(resultSet.next()){
-                txtFirstName.setText(resultSet.getString("first_name"));
-                txtLastName.setText(resultSet.getString("last_name"));
-                txtPhone.setText(resultSet.getString("phone"));
-                txtEmail.setText(resultSet.getString("email_address"));
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String phone = resultSet.getString("phone");
+                String email = resultSet.getString("email_address");
+
+                System.out.println("Retrieved values: " + firstName + ", " + lastName + ", " + phone + ", " + email);
+
+                if (firstName != null) {
+                    txtFirstName.setText(firstName);
+                } else {
+                    txtFirstName.clear();
+                }
+                //txtFirstName.setText(resultSet.getString("first_name"));
+                if (lastName != null) {
+                    txtLastName.setText(lastName);
+                } else {
+                    txtLastName.clear();
+                }
+                //txtLastName.setText(resultSet.getString("last_name"));
+                if (phone != null) {
+                    txtPhone.setText(phone);
+                } else {
+                    txtPhone.clear();
+                }
+                //txtPhone.setText(resultSet.getString("phone"));
+                if (email != null) {
+                    txtEmail.setText(email);
+                } else {
+                    txtEmail.clear();
+                }
+                //txtEmail.setText(resultSet.getString("email_address"));
             }
         }catch (Exception e){
             e.printStackTrace();

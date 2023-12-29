@@ -1,5 +1,8 @@
 package com.example.studentchestv1001;
 
+import com.example.studentchestv1001.AppState;
+import com.example.studentchestv1001.DatabaseConnection;
+import com.example.studentchestv1001.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

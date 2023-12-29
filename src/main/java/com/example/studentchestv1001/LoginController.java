@@ -58,8 +58,6 @@ public class LoginController {
             while(queryResult.next()){
                 if(queryResult.getInt(1) == 1){
                     findId(statement);
-                    queryResult.close();
-                    statement.close();
                     AppState.setLoginController(this);
 
                     Parent root = FXMLLoader.load(getClass().getResource("main-display-view.fxml"));
@@ -69,8 +67,6 @@ public class LoginController {
                     stage.show();
                 }else{
                     showErrorAlert("Invalid login. Please try again!");
-                    queryResult.close();
-                    statement.close();
                 }
             }
         }catch (Exception e){

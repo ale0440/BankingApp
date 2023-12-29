@@ -1,6 +1,7 @@
 module com.example.studentchestv1001 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
