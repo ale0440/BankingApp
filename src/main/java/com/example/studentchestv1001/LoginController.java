@@ -46,18 +46,18 @@ public class LoginController {
     }
 
     public void validate(ActionEvent event){
-        DatabaseConnection connectNow = new DatabaseConnection();
-        Connection connectDB = connectNow.getConnection();
-
         String verifyLogin = "select count(1) from user_login where username = '" + txtUsername.getText() + "' and password_hash = '" + txtPassword.getText() + "'";
 
         try{
+            DatabaseConnection connectNow = new DatabaseConnection();
+            Connection connectDB = connectNow.getConnection();
             Statement statement = connectDB.createStatement();
+            Statement statement1 = connectDB.createStatement();
             ResultSet queryResult = statement.executeQuery(verifyLogin);
 
             while(queryResult.next()){
                 if(queryResult.getInt(1) == 1){
-                    findId(statement);
+                    findId(statement1);
                     AppState.setLoginController(this);
 
                     Parent root = FXMLLoader.load(getClass().getResource("main-display-view.fxml"));
