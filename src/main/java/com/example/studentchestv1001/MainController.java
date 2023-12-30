@@ -20,14 +20,14 @@ import java.sql.Statement;
 
 public class MainController {
     @FXML
-    private Label lblCardName;
+    public Label lblCardName;
     @FXML
-    private Label lblCardNumber;
+    public Label lblCardNumber;
     @FXML
     private Label lblMoney;
     private double balance;
     private int time = 0;
-
+    public String cardNumber;
     @FXML
     private void initialize(){
         init();
@@ -38,20 +38,26 @@ public class MainController {
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
 
-        String query = "select first_name, last_name, card_number, balance from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
+        String query = "select card_number, balance from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
+        String query1 = "select card_name from card c where c.idaccount = " + login.getId();
+        // String query = "select first_name, last_name, card_number, balance from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
         try{
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             if(resultSet.next()){
-                lblCardName.setText(resultSet.getString(1) + " " + resultSet.getString(2));
-                String number = resultSet.getString(3);
-                number = maskCardNumber(number);
-                lblCardNumber.setText(number);
-                balance = resultSet.getDouble(4);
+                Statement statement1 = connectNow.createStatement();
+                ResultSet resultSet1 = statement1.executeQuery(query1);
+                if(resultSet1.next())
+                     lblCardName.setText(resultSet1.getString(1));
+                cardNumber = resultSet.getString(1);
+                cardNumber = maskCardNumber(cardNumber);
+                lblCardNumber.setText(cardNumber);
+                balance = resultSet.getDouble(2);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+        AppState.setMainController(this);
     }
 
     public void seeBalance(ActionEvent event) throws IOException{
@@ -63,7 +69,7 @@ public class MainController {
         time++;
     }
 
-    private String maskCardNumber(String input){
+    public String maskCardNumber(String input){
         if(input != null && input.length() >=4){
             String lastFour = input.substring(input.length() - 4);
             return "****"+lastFour;
