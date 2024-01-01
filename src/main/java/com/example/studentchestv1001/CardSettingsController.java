@@ -1,3 +1,5 @@
+package com.example.studentchestv1001;
+
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
@@ -20,9 +22,15 @@ import java.sql.Statement;
 
 public class CardSettingsController {
     @FXML
+    private Button btnChangeName;
+    @FXML
+    private Button btnLimit;
+    @FXML
     public Label lblCardNumber;
     @FXML
     public Label lblCardName;
+    @FXML
+    public Label lblBlock;
     @FXML
     private TextField txtCardName;
     @FXML
@@ -30,25 +38,27 @@ public class CardSettingsController {
     @FXML
     private TextField txtWithdrawLimit;
     @FXML
-    private Button btnBlock;
+    public Button btnBlock;
     @FXML
-    private Button btnUnblock;
+    public Button btnUnblock;
     private DatabaseConnection connectDB = new DatabaseConnection();
     private Connection connectNow = connectDB.getConnection();
     private LoginController login = AppState.getLoginController();
+    private MainController main = AppState.getMainController();
+    public boolean isCardBlocked;
 
     @FXML
     public void initialize(){
+        updateButtonState();
         init();
     }
 
+    public void setIsCardBlocked (boolean ok){
+        isCardBlocked = ok;
+    }
+
     private void init(){
-
-        btnUnblock.setVisible(false);
-
         try{
-            MainController main = AppState.getMainController();
-            //LoginController login = AppState.getLoginController();
             this.lblCardName.setText(main.lblCardName.getText());
             this.lblCardNumber.setText(main.lblCardNumber.getText());
 
@@ -64,6 +74,7 @@ public class CardSettingsController {
         }catch (Exception e){
             e.printStackTrace();
         }
+        AppState.setCardSettingsController(this);
     }
 
     public void change(ActionEvent event) throws IOException {
@@ -92,7 +103,26 @@ public class CardSettingsController {
     }
 
     public void blockCard(ActionEvent event) throws IOException {
-        
+        setIsCardBlocked(true);
+        System.out.println("card blocked");
+        changeToMainDisplay(event);
+    }
+
+    public void unblockCard(ActionEvent event) throws IOException {
+        setIsCardBlocked(false);
+        changeToMainDisplay(event);
+        System.out.println("card unblocked");
+    }
+
+    public void updateButtonState() {
+        isCardBlocked = main.cardBlocked;
+        if(isCardBlocked == true){
+            lblBlock.setText("Unblock your card anytime.");
+        }else lblBlock.setText("Hard times, but you can block your card.");
+        btnChangeName.setDisable(isCardBlocked);
+        btnLimit.setDisable(isCardBlocked);
+        btnUnblock.setVisible(isCardBlocked);
+        btnBlock.setVisible(!isCardBlocked);
     }
 
     public void changeToMainDisplay(ActionEvent event) throws IOException {

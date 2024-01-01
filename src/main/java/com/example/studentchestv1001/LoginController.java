@@ -60,7 +60,7 @@ public class LoginController {
                     findId(statement1);
                     AppState.setLoginController(this);
 
-                    Parent root = FXMLLoader.load(getClass().getResource("main-display-view.fxml"));
+                    Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
                     Scene scene = new Scene(root);
                     Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
                     stage.setScene(scene);
