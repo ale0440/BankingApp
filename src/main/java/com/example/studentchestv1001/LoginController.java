@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -18,6 +19,72 @@ import java.io.IOException;
 import java.sql.*;
 
 public class LoginController {
+    @FXML
+    public void initialize(){
+        init();
+    }
+
+    private void init(){
+
+        String query = "select username, password, checked from remember_me;";
+
+        try{
+            Statement statement = connectDB.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            if(resultSet.next()){
+                if(resultSet.getBoolean(3) == true){
+                    chRememberMe.setSelected(true);
+                    txtUsername.setText(resultSet.getString(1));
+                    txtPassword.setText(resultSet.getString(2));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void rememberData(ActionEvent event) throws SQLException {
+        setUsernamePassword();
+        //find if the username and password introduced are in the database
+        String query1 = "select username, password_hash from user_login";
+        boolean ok = false;
+        try{
+            Statement statement = connectDB.createStatement();
+            ResultSet resultSet = statement.executeQuery(query1);
+            while(resultSet.next() && ok == false){
+                if(resultSet.getString(1).equals(username) && resultSet.getString(2).equals(password))
+                    ok = true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(ok == true){
+            String query = String.format("update remember_me set username = '%s', password = '%s' where id = 1;", username, password);
+            try{
+                Statement statement = connectDB.createStatement();
+                statement.executeUpdate(query);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(chRememberMe.isSelected() == true){
+            query1 = "update remember_me set checked = true";
+
+        }else{
+            query1 = "update remember_me set checked = false";
+        }
+        Statement statement1 = connectDB.createStatement();
+        statement1.executeUpdate(query1);
+    }
+
+    private void setUsernamePassword(){
+        if(!txtUsername.getText().isEmpty())
+            username = txtUsername.getText();
+        if(!txtPassword.getText().isEmpty())
+            password = txtPassword.getText();
+    }
+
     public void changeToMainDisplay(ActionEvent event) throws IOException {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
@@ -42,8 +109,6 @@ public class LoginController {
         String verifyLogin = "select count(1) from user_login where username = '" + txtUsername.getText() + "' and password_hash = '" + txtPassword.getText() + "'";
 
         try{
-            DatabaseConnection connectNow = new DatabaseConnection();
-            Connection connectDB = connectNow.getConnection();
             Statement statement = connectDB.createStatement();
             Statement statement1 = connectDB.createStatement();
             ResultSet queryResult = statement.executeQuery(verifyLogin);
@@ -89,6 +154,12 @@ public class LoginController {
     private TextField txtUsername;
     @FXML
     private TextField txtPassword;
+    @FXML
+    public CheckBox chRememberMe;
 
     public int id;
+    private String username = "", password = "";
+
+    private DatabaseConnection connectNow = new DatabaseConnection();
+    private Connection connectDB = connectNow.getConnection();
 }
