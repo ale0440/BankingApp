@@ -23,7 +23,7 @@
                   <Insets left="20.0" top="4.0" />
                </HBox.margin>
                <graphic>
-                  <FontAwesomeIconView fill="#fda285" glyphName="" size="45" text="">
+                  <FontAwesomeIconView fill="#fda285" size="45" text="">
                      <font>
                         <Font name="FontAwesome" size="12.0" />
                      </font>

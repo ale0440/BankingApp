@@ -31,7 +31,7 @@ public class MainController {
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
 
-        String query = "select card_number, balance from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
+        String query = "select card_number, balance, phone from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
         String query1 = "select card_name from card c where c.idaccount = " + login.getId();
         // String query = "select first_name, last_name, card_number, balance from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
         try{
@@ -46,6 +46,7 @@ public class MainController {
                 cardNumber = maskCardNumber(cardNumber);
                 lblCardNumber.setText(cardNumber);
                 balance = resultSet.getDouble(2);
+                phone = resultSet.getString(3);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -135,12 +136,15 @@ public class MainController {
             btnHistory.setDisable(settings.isCardBlocked);
             btnIBAN.setDisable(settings.isCardBlocked);
             btnWithdraw.setDisable(settings.isCardBlocked);
+            btnProfile.setDisable(settings.isCardBlocked);
         }
     }
 
 
     @FXML
     public Button btnTransfer;
+    @FXML
+    public Button btnProfile;
     @FXML
     public Button btnHistory;
     @FXML
@@ -158,7 +162,8 @@ public class MainController {
     @FXML
     private Label lblMoney;
 
-    private double balance;
+    public double balance;
+    public String phone;
     private int time = 0;
     public String cardNumber;
     public boolean cardBlocked = false;

@@ -42,7 +42,7 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-    
+
     public void rememberData(ActionEvent event) throws SQLException {
         setUsernamePassword();
         //find if the username and password introduced are in the database
