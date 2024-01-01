@@ -21,29 +21,6 @@ import java.sql.Statement;
 
 public class MainController {
     @FXML
-    public Button btnTransfer;
-    @FXML
-    public Button btnHistory;
-    @FXML
-    public Button btnDetails;
-    @FXML
-    public Button btnSettings;
-    @FXML
-    public Button btnWithdraw;
-    @FXML
-    public Button btnIBAN;
-    @FXML
-    public Label lblCardName;
-    @FXML
-    public Label lblCardNumber;
-    @FXML
-    private Label lblMoney;
-    private double balance;
-    private int time = 0;
-    public String cardNumber;
-    public boolean cardBlocked = false;
-    private com.example.studentchestv1001.CardSettingsController settings = AppState.getCardSettingsController();
-    @FXML
     private void initialize(){
         updateButtons();
         init();
@@ -160,5 +137,31 @@ public class MainController {
             btnWithdraw.setDisable(settings.isCardBlocked);
         }
     }
+
+
+    @FXML
+    public Button btnTransfer;
+    @FXML
+    public Button btnHistory;
+    @FXML
+    public Button btnDetails;
+    @FXML
+    public Button btnSettings;
+    @FXML
+    public Button btnWithdraw;
+    @FXML
+    public Button btnIBAN;
+    @FXML
+    public Label lblCardName;
+    @FXML
+    public Label lblCardNumber;
+    @FXML
+    private Label lblMoney;
+
+    private double balance;
+    private int time = 0;
+    public String cardNumber;
+    public boolean cardBlocked = false;
+    private com.example.studentchestv1001.CardSettingsController settings = AppState.getCardSettingsController();
 
 }

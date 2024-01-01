@@ -22,39 +22,9 @@ import java.sql.Statement;
 
 public class CardSettingsController {
     @FXML
-    private Button btnChangeName;
-    @FXML
-    private Button btnLimit;
-    @FXML
-    public Label lblCardNumber;
-    @FXML
-    public Label lblCardName;
-    @FXML
-    public Label lblBlock;
-    @FXML
-    private TextField txtCardName;
-    @FXML
-    private TextField txtPaymentLimit;
-    @FXML
-    private TextField txtWithdrawLimit;
-    @FXML
-    public Button btnBlock;
-    @FXML
-    public Button btnUnblock;
-    private DatabaseConnection connectDB = new DatabaseConnection();
-    private Connection connectNow = connectDB.getConnection();
-    private LoginController login = AppState.getLoginController();
-    private MainController main = AppState.getMainController();
-    public boolean isCardBlocked;
-
-    @FXML
     public void initialize(){
         updateButtonState();
         init();
-    }
-
-    public void setIsCardBlocked (boolean ok){
-        isCardBlocked = ok;
     }
 
     private void init(){
@@ -104,14 +74,24 @@ public class CardSettingsController {
 
     public void blockCard(ActionEvent event) throws IOException {
         setIsCardBlocked(true);
-        System.out.println("card blocked");
+        updateCardStatus("inactiv");
         changeToMainDisplay(event);
     }
 
     public void unblockCard(ActionEvent event) throws IOException {
         setIsCardBlocked(false);
+        updateCardStatus("activ");
         changeToMainDisplay(event);
-        System.out.println("card unblocked");
+    }
+
+    private void updateCardStatus(String status){
+        try{
+            String query = String.format("update card set status = '%s' where idcard = %d;", status, login.getId());
+            Statement statement = connectNow.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void updateButtonState() {
@@ -125,6 +105,10 @@ public class CardSettingsController {
         btnBlock.setVisible(!isCardBlocked);
     }
 
+    public void setIsCardBlocked (boolean ok){
+        isCardBlocked = ok;
+    }
+
     public void changeToMainDisplay(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
         Scene scene = new Scene(root);
@@ -133,4 +117,32 @@ public class CardSettingsController {
         stage.show();
     }
 
+
+    @FXML
+    private Button btnChangeName;
+    @FXML
+    private Button btnLimit;
+    @FXML
+    public Button btnBlock;
+    @FXML
+    public Button btnUnblock;
+    @FXML
+    public Label lblCardNumber;
+    @FXML
+    public Label lblCardName;
+    @FXML
+    public Label lblBlock;
+    @FXML
+    private TextField txtCardName;
+    @FXML
+    private TextField txtPaymentLimit;
+    @FXML
+    private TextField txtWithdrawLimit;
+
+    private DatabaseConnection connectDB = new DatabaseConnection();
+    private Connection connectNow = connectDB.getConnection();
+    private LoginController login = AppState.getLoginController();
+    private MainController main = AppState.getMainController();
+
+    public boolean isCardBlocked;
 }

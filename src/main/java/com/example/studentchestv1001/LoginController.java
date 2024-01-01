@@ -18,13 +18,6 @@ import java.io.IOException;
 import java.sql.*;
 
 public class LoginController {
-    @FXML
-    private TextField txtUsername;
-    @FXML
-    private TextField txtPassword;
-
-    public int id;
-
     public void changeToMainDisplay(ActionEvent event) throws IOException {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
@@ -91,4 +84,11 @@ public class LoginController {
     public int getId() {
         return id;
     }
+
+    @FXML
+    private TextField txtUsername;
+    @FXML
+    private TextField txtPassword;
+
+    public int id;
 }
