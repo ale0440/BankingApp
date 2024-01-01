@@ -1,6 +1,7 @@
 package com.example.studentchestv1001;
 
 import com.example.studentchestv1001.AppState;
+import com.example.studentchestv1001.CardSettingsController;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
 import javafx.animation.KeyFrame;
@@ -22,16 +23,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class CardDetailsController {
-    @FXML
-    private Label lblMoney;
-    @FXML
-    private Label  lblCVV;
-    @FXML
-    private Label  lblTime;
-    private double balance;
-    private int time = 0;
-    private int remainingSeconds = 15;
-    private Timeline timeline;
     @FXML
     public void initialize(){
         init();
@@ -102,4 +93,15 @@ public class CardDetailsController {
         stage.setScene(scene);
         stage.show();
     }
+
+    @FXML
+    private Label lblMoney;
+    @FXML
+    private Label  lblCVV;
+    @FXML
+    private Label  lblTime;
+    private double balance;
+    private int time = 0;
+    private int remainingSeconds = 15;
+    private Timeline timeline;
 }

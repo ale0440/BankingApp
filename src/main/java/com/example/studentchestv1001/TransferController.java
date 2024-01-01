@@ -24,10 +24,6 @@ import java.sql.Statement;
 
 public class TransferController {
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    private VBox vBox;
-    @FXML
     private void initialize(){
         init();
     }
@@ -117,13 +113,6 @@ public class TransferController {
 
         vBox.getChildren().add(label);
     }
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void sendMoneyTo(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
@@ -136,6 +125,8 @@ public class TransferController {
 
         AgendaController controller = loader.getController();
         controller.setType(1);
+
+
     }
 
     public void requestMoneyFrom(ActionEvent event) throws IOException {
@@ -150,4 +141,18 @@ public class TransferController {
         AgendaController controller = loader.getController();
         controller.setType(2);
     }
+
+    public void changeToMainDisplay(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private VBox vBox;
 }

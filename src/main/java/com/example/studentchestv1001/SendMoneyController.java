@@ -13,29 +13,18 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SendMoneyController {
-    private String phoneNumber;
-    private int type; // 1 - send, 2 - request
-    @FXML
-    private TextField txtAmount;
-    @FXML
-    private TextField txtPayment;
-
     public void initializeData(String phone, int type) {
         this.phoneNumber = phone;
         this.type = type;
     }
 
     public void makePayement(ActionEvent event) throws IOException {
-        //update the database
-        DatabaseConnection connectDB = new DatabaseConnection();
-        Connection connectNow = connectDB.getConnection();
-        LoginController login = AppState.getLoginController();
         try{
             Statement statement = connectNow.createStatement();
 
             double amount = Double.parseDouble(txtAmount.getText());
             String payment = txtPayment.getText();
-            int account1 = login.getId(), account2 = 0;
+            account1 = login.getId(); account2 = 0;
 
             //find the id of account2
             String query1 = String.format("select idcustomer from customer where phone = '%s';", phoneNumber);
@@ -44,8 +33,17 @@ public class SendMoneyController {
                 account2 = resultSet.getInt(1);
             }
             String typeString = "";
-            if(type == 1)
+            if(type == 1) {
                 typeString = "send";
+
+                //UPDATE DATABASE BALANCE
+                //for account1
+                double balance1 = getBalance(account1);
+                //for account2
+                double balance2 = getBalance(account2);
+                updateBalance(balance1 - amount, account1);
+                updateBalance(balance2 + amount, account2);
+            }
             else typeString = "request";
             String query = String.format("insert into transfer(account1, account2, type, amount, payment_details) values('%d','%d','%s','%f', '%s');", account1, account2, typeString, amount, payment);
             statement.executeUpdate(query);
@@ -55,4 +53,41 @@ public class SendMoneyController {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.close();
     }
+
+    private double getBalance(int account){
+        double balance = 0;
+        String query = "select balance from account where idaccount = " + account;
+        try{
+            Statement statement = connectNow.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            if(resultSet.next())
+                balance = resultSet.getDouble(1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return balance;
+    }
+
+    private void updateBalance(double newBalance, int account){
+        String query = String.format("update account set balance = %f where idaccount = %d;", newBalance, account);
+        try{
+            Statement statement = connectNow.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private String phoneNumber;
+    private int type; // 1 - send, 2 - request
+    @FXML
+    private TextField txtAmount;
+    @FXML
+    private TextField txtPayment;
+
+    public int account1, account2;
+
+    private DatabaseConnection connectDB = new DatabaseConnection();
+    private Connection connectNow = connectDB.getConnection();
+    private LoginController login = AppState.getLoginController();
 }

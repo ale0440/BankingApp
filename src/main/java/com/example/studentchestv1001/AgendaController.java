@@ -26,15 +26,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AgendaController {
-    public int type;
-    @FXML
-    private VBox vBox;
-    @FXML
-    private TextField txtSearch;
-    @FXML
-    private Button btnSearch;
-    private String phoneNumber;
-
     public void setType(int type){
         this.type = type;
     }
@@ -148,4 +139,14 @@ public class AgendaController {
         vBox.getChildren().clear();
         init();
     }
+
+
+    public int type;
+    @FXML
+    private VBox vBox;
+    @FXML
+    private TextField txtSearch;
+    @FXML
+    private Button btnSearch;
+    private String phoneNumber;
 }
