@@ -1,6 +1,7 @@
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
+import com.example.studentchestv1001.SendMoneyController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class IbanController {
     @FXML
@@ -143,11 +145,38 @@ public class IbanController {
             String query = "";
             if(chIBAN.isSelected() == true){
                 //update iban_transfer table
-                query = String.format("insert into iban_transfer(amount, payment_details, iban, beneficiary_name, idaccount) values (%f, '%s', '%s', '%s', %d);", amount, details, iban, name, login.getId());
+                query = String.format("insert into iban_transfer(amount, payment_details, iban, beneficiary_name, idaccount, transfer_date) values (%f, '%s', '%s', '%s', %d, '%s');", amount, details, iban, name, login.getId(), currentTimestamp);
             } else if (chAlias.isSelected() == true) {
                 //update alias_pay_transfer table
-                query = String.format("insert into alias_pay_transfer(amount, payment_details, phone, idaccount) values (100, 'dskajd', '0123547896', 1);", amount, details, phone, login.getId());
+                query = String.format("insert into alias_pay_transfer(amount, payment_details, phone, idaccount, transfer_date) values (%f, '%s', '%s', %d, '%s');", amount, details, phone, login.getId(), currentTimestamp);
             }
+            statement.executeUpdate(query);
+
+            //update the balance after transaction
+            updateBalance(getBalance(login.getId()) - amount, login.getId());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public double getBalance(int account){
+        double balance = 0;
+        String query = "select balance from account where idaccount = " + account;
+        try{
+            Statement statement = connectNow.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            if(resultSet.next())
+                balance = resultSet.getDouble(1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return balance;
+    }
+
+    public void updateBalance(double newBalance, int account){
+        String query = String.format("update account set balance = %f where idaccount = %d;", newBalance, account);
+        try{
+            Statement statement = connectNow.createStatement();
             statement.executeUpdate(query);
         }catch (Exception e){
             e.printStackTrace();
@@ -228,4 +257,5 @@ public class IbanController {
     private Connection connectNow = connectDB.getConnection();
     private LoginController login = AppState.getLoginController();
     private boolean ok;
+    private Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 }

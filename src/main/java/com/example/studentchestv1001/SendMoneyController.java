@@ -24,6 +24,7 @@ public class SendMoneyController {
 
     private void init(){
         txtPayment.setText("Transfer StudentChest");
+        AppState.setSendMoneyController(this);
     }
 
     public void initializeData(String phone, int type) {
@@ -61,7 +62,7 @@ public class SendMoneyController {
                 updateBalance(balance2 + amount, account2);
             }
             else typeString = "request";
-            String query = String.format("insert into transfer(account1, account2, type, amount, payment_details) values('%d','%d','%s','%f', '%s');", account1, account2, typeString, amount, payment);
+            String query = String.format("insert into transfer(account1, account2, type, amount, payment_details, transfer_date) values('%d','%d','%s','%f', '%s', '%s');", account1, account2, typeString, amount, payment, currentTimestamp);
             statement.executeUpdate(query);
         }catch (Exception e){
             e.printStackTrace();
@@ -70,7 +71,7 @@ public class SendMoneyController {
         stage.close();
     }
 
-    private double getBalance(int account){
+    public double getBalance(int account){
         double balance = 0;
         String query = "select balance from account where idaccount = " + account;
         try{
@@ -84,7 +85,7 @@ public class SendMoneyController {
         return balance;
     }
 
-    private void updateBalance(double newBalance, int account){
+    public void updateBalance(double newBalance, int account){
         String query = String.format("update account set balance = %f where idaccount = %d;", newBalance, account);
         try{
             Statement statement = connectNow.createStatement();
@@ -115,4 +116,5 @@ public class SendMoneyController {
     private DatabaseConnection connectDB = new DatabaseConnection();
     private Connection connectNow = connectDB.getConnection();
     private LoginController login = AppState.getLoginController();
+    private Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 }

@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -37,18 +38,26 @@ public class TransactionController {
     private void init(){
         this.lblCardName.setText(main.lblCardName.getText());
         this.lblCardNumber.setText(main.lblCardNumber.getText());
+        setChoiceBox();
+    }
 
+    private void setHistory(){
         //initialize the scroll pane with the transactions
         try{
             DatabaseConnection connectDB = new DatabaseConnection();
             Connection connectNow = connectDB.getConnection();
             LoginController login = AppState.getLoginController();
+            int index = -1;
 
             //all transactions from database
             String query = "select idaccount, amount, transaction_date, trader, code, address, type from transaction where idaccount = " + login.getId();
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while(resultSet.next()){
+                if(mode == 0)
+                    index = 0;
+                else
+                    index++;
                 String text1 = String.format("%s\n%s", resultSet.getString(4), resultSet.getString(6));
                 String date = resultSet.getString(3);
                 char sign = '+';
@@ -57,12 +66,28 @@ public class TransactionController {
                 String text2 = String.format("%c%.2f\n%s",sign,resultSet.getDouble(2), date.substring(0, 10));
                 String details = String.format("%s\n%s\n%s", resultSet.getString(6), date, resultSet.getString(5));
                 HBox hBox = createHBox(text1, text2, details);
-                vBox.getChildren().add(hBox);
+                if(index >= 0 && index <= vBox.getChildren().size())
+                     vBox.getChildren().add(index, hBox);
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void setChoiceBox(){
+        choiceBox.getItems().addAll(sort);
+        choiceBox.setOnAction(this::setOrder);
+        choiceBox.setValue(sort[0]);
+        choiceBox.fireEvent(new ActionEvent(choiceBox, ActionEvent.NULL_SOURCE_TARGET));
+    }
+
+    private void setOrder(ActionEvent event){
+        vBox.getChildren().clear();
+        if(choiceBox.getValue().equals(sort[0]))
+            mode = 0; //newest
+        else
+            mode = 1; //oldest
+        setHistory();
     }
 
     private HBox createHBox(String text1, String text2, String details){
@@ -119,4 +144,8 @@ public class TransactionController {
     private ScrollPane scrollPane;
     @FXML
     private VBox vBox;
+    @FXML
+    private ChoiceBox<String> choiceBox;
+    private String[] sort = {"Newest", "Oldest"};
+    private int mode = 0;
 }

@@ -7,9 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class TransferController {
     @FXML
@@ -32,19 +35,22 @@ public class TransferController {
 
     private void init(){
         AppState.setTransferController(this);
+        setChoiceBox();
+    }
 
-        DatabaseConnection connectDB = new DatabaseConnection();
-        Connection connectNow = connectDB.getConnection();
-        LoginController login = AppState.getLoginController();
-
-        String query = "select account1, account2, type, amount, payment_details from transfer;";
-
+    private void setHistory(){
+        String query = "select account1, account2, type, amount, payment_details, transfer_date from transfer;";
+        int index = -1;
         try{
             Statement statement = connectNow.createStatement();
             ResultSet queryResult = statement.executeQuery(query);
             String labelText = "";
             while(queryResult.next()){
                 labelText = "";
+                if(mode == 0)
+                    index = 0;
+                else
+                    index++;
                 if(queryResult.getInt(1) == login.getId()){
                     //if account1 is the logged in user's id => add a label to the anchor pane with the
                     //message: "You sent/requested $$ to account2's card name"
@@ -68,12 +74,13 @@ public class TransferController {
                     ResultSet queryResult1 = statement1.executeQuery(queryName);
                     String name = "";
                     if(queryResult1.next()){
-                       name = queryResult1.getString(1) + " " + queryResult1.getString(2);
+                        name = queryResult1.getString(1) + " " + queryResult1.getString(2);
                     }
                     labelText += name;
                     statement1.close();
                     queryResult1.close();
-                    addLabel(labelText, queryResult.getString(5));
+                    if(index >= 0 && index <= vBox.getChildren().size())
+                        addLabel(labelText, queryResult.getString(5) + "\n" + queryResult.getString(6), index);
                 }
                 else if(queryResult.getInt(2) == login.getId()){
                     //if account2 is the logged in user's id => add a label to the anchor pane with the
@@ -88,16 +95,32 @@ public class TransferController {
                     labelText += name + " sent you " + queryResult.getDouble(4);
                     statement1.close();
                     queryResult1.close();
-                    addLabel(labelText, queryResult.getString(5));
+
+                        addLabel(labelText, queryResult.getString(5) + "\n" + queryResult.getString(6), index);
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
-            //System.out.println("Something went wrong");
         }
     }
 
-    private void addLabel(String labelText, String paymentDetails){
+    private void setChoiceBox(){
+        choiceBox.getItems().addAll(sort);
+        choiceBox.setOnAction(this::setOrder);
+        choiceBox.setValue(sort[0]);
+        choiceBox.fireEvent(new ActionEvent(choiceBox, ActionEvent.NULL_SOURCE_TARGET));
+    }
+
+    private void setOrder(ActionEvent event){
+        vBox.getChildren().clear();
+        if(choiceBox.getValue().equals(sort[0]))
+            mode = 0; //newest
+        else
+            mode = 1; //oldest
+        setHistory();
+    }
+
+    private void addLabel(String labelText, String paymentDetails, int index){
 
         //creating the new label
         Label label = new Label(labelText);
@@ -115,13 +138,12 @@ public class TransferController {
         Tooltip tooltip = new Tooltip(paymentDetails);
         Tooltip.install(label,tooltip);
 
-        vBox.getChildren().add(label);
+        vBox.getChildren().add(index, label);
     }
 
     public void sendMoneyTo(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
         Parent root = loader.load();
-       //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("com/example/studentchestv1001/agenda-view.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -129,8 +151,6 @@ public class TransferController {
 
         com.example.studentchestv1001.AgendaController controller = loader.getController();
         controller.setType(1);
-
-
     }
 
     public void requestMoneyFrom(ActionEvent event) throws IOException {
@@ -159,4 +179,11 @@ public class TransferController {
     private ScrollPane scrollPane;
     @FXML
     private VBox vBox;
+    @FXML
+    private ChoiceBox<String> choiceBox;
+    private String[] sort = {"Newest", "Oldest"};
+    private int mode = 0;
+    private DatabaseConnection connectDB = new DatabaseConnection();
+    private Connection connectNow = connectDB.getConnection();
+    private LoginController login = AppState.getLoginController();
 }

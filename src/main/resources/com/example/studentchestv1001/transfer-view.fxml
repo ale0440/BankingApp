@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -49,15 +50,16 @@
             <Font name="Segoe UI Bold" size="25.0" />
          </font>
       </Button>
-      <Label layoutX="50.0" layoutY="326.0" text="Recent Transfers" AnchorPane.leftAnchor="50.0">
+      <Label layoutX="47.0" layoutY="269.0" text="Recent Transfers" AnchorPane.leftAnchor="47.0">
          <font>
             <Font name="Segoe UI Bold" size="20.0" />
          </font>
       </Label>
-      <ScrollPane hbarPolicy="NEVER" layoutX="50.0" layoutY="360.0" prefHeight="330.0" prefWidth="350.0" vbarPolicy="ALWAYS">
+      <ScrollPane hbarPolicy="NEVER" layoutX="50.0" layoutY="360.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="370.0" prefWidth="350.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="21.0" AnchorPane.topAnchor="340.0">
          <content>
-            <VBox fx:id="vBox" prefHeight="330.0" prefWidth="350.0" />
+            <VBox fx:id="vBox" prefHeight="369.0" prefWidth="350.0" />
          </content>
       </ScrollPane>
+      <ChoiceBox fx:id="choiceBox" layoutX="47.0" layoutY="301.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
