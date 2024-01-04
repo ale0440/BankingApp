@@ -1,3 +1,6 @@
+import com.example.studentchestv1001.AppState;
+import com.example.studentchestv1001.DatabaseConnection;
+import com.example.studentchestv1001.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +19,9 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class IbanController {
     @FXML
@@ -26,7 +32,6 @@ public class IbanController {
     private void init(){
         chAlias.setSelected(false);
         chIBAN.setSelected(false);
-        System.out.println(vBox.getChildren().size());
     }
 
     public void checkIBAN(ActionEvent event){
@@ -65,19 +70,59 @@ public class IbanController {
         createTextField("txtPhone");
     }
 
-    public void completePayment(ActionEvent event){
+    public void completePayment(ActionEvent event) throws IOException {
         if(chIBAN.isSelected() == false && chAlias.isSelected() == false)
-            showAlert();
-        else{
-            //update IBAN DATABASE
-            System.out.println("Database to be updated");
+            showAlert("You must select a method: IBAN or Alias Pay!");
+        else {
+            ok = true;
+            //traverse TextField children fo VBox and verify if they are empty or not
+            for(Node node : vBox.getChildren()){
+                if(node instanceof TextField){
+                    TextField textField = (TextField) node;
+                    if(textField.getText().isEmpty()){
+                        showAlert("You must introduce data in each text field!");
+                        ok = false;
+                        break;
+                    }
+                    else{
+                        validateTextField(textField);
+                    }
+                }
+            }
+
+            //if everything is correct, update the database
+            if(ok == true){
+                System.out.println("Database to be updated");
+                //changeToMainDisplay(event);
+            }
         }
     }
 
-    private void showAlert(){
+    private void validateTextField(TextField textField){
+        String txtId = textField.getId();
+        if(txtId.equals("txtSum")){
+            try{
+                Double.parseDouble(textField.getText());
+            }catch (NumberFormatException e){
+                showAlert("Not a valid amount of money!");
+                ok = false;
+            }
+        }
+        else if(txtId.equals("txtIBAN")){
+            if(textField.getText().length() < 20 || textField.getText().length() > 34){
+                showAlert("Invalid IBAN!");
+                ok = false;
+            }
+        } else if(txtId.equals("txtPhone") && textField.getText().length() != 10){
+            showAlert("Incorrect phone number!");
+            ok = false;
+        }
+    }
+
+    private void showAlert(String s){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("WARNING!");
-        alert.setContentText("You must select a transfer method: IBAN or Alias Pay");
+        alert.setContentText(s);
         alert.setHeaderText(null);
         alert.showAndWait();
     }
@@ -120,4 +165,8 @@ public class IbanController {
     private TextField txtPaymentDetails;
     @FXML
     private VBox vBox;
+    private DatabaseConnection connectDB = new DatabaseConnection();
+    private Connection connectNow = connectDB.getConnection();
+    private LoginController login = AppState.getLoginController();
+    private boolean ok;
 }
