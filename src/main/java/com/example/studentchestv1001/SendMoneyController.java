@@ -6,6 +6,7 @@ import com.example.studentchestv1001.LoginController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -16,6 +17,15 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 public class SendMoneyController {
+    @FXML
+    public void initialize(){
+        init();
+    }
+
+    private void init(){
+        txtPayment.setText("Transfer StudentChest");
+    }
+
     public void initializeData(String phone, int type) {
         this.phoneNumber = phone;
         this.type = type;
@@ -24,8 +34,11 @@ public class SendMoneyController {
     public void makePayement(ActionEvent event) throws IOException {
         try{
             Statement statement = connectNow.createStatement();
-
-            double amount = Double.parseDouble(txtAmount.getText());
+            double amount = 0;
+            if(!txtAmount.getText().isEmpty())
+                amount = Double.parseDouble(txtAmount.getText());
+            else
+                showAlert();
             String payment = txtPayment.getText();
             account1 = login.getId(); account2 = 0;
 
@@ -49,10 +62,7 @@ public class SendMoneyController {
             }
             else typeString = "request";
             String query = String.format("insert into transfer(account1, account2, type, amount, payment_details) values('%d','%d','%s','%f', '%s');", account1, account2, typeString, amount, payment);
-            //Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-            //String queryTransaction = String.format("insert into transaction(idaccount, amount, transaction_date, trader, code, address, type) values(%d, %f, '%s', '%s', '9999', 'StudentChest', '%s');", login.getId(), amount, currentTimestamp, account2Name, typeString);
-            //statement.executeUpdate(query);
-            //statement.executeUpdate(queryTransaction);
+            statement.executeUpdate(query);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -82,6 +92,15 @@ public class SendMoneyController {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(){
+        String s = "You must introduce an amount!";
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("WARNING!");
+        alert.setHeaderText(null);
+        alert.setContentText(s);
+        alert.showAndWait();
     }
 
     private String phoneNumber;
