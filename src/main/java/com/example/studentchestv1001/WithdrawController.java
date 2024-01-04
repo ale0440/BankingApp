@@ -33,10 +33,6 @@ public class WithdrawController {
         this.lblCardNumber.setText(main.lblCardNumber.getText());
         this.lblPhone.setText(main.phone);
         setAmount(amount);
-
-        //make inactive withdraw if over 60 minutes
-
-        //MAKE ABLE TO WRITE THE VALUE, NOT JUST INCREASAE/DECREASE IT
     }
 
     private void setAmount(double amount){
@@ -99,7 +95,6 @@ public class WithdrawController {
         stage.setScene(scene);
         stage.show();
     }
-
 
     public void seeBalance(ActionEvent event) throws IOException {
         if(time%2==0){

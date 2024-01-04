@@ -4,6 +4,7 @@ public class AppState {
     private static com.example.studentchestv1001.LoginController loginController;
     private static com.example.studentchestv1001.MainController mainController;
     private static com.example.studentchestv1001.CardSettingsController cardSettingsController;
+    private static com.example.studentchestv1001.TransferController transferController;
 
     public static com.example.studentchestv1001.LoginController getLoginController() {
         return loginController;
@@ -17,6 +18,10 @@ public class AppState {
         return cardSettingsController;
     }
 
+    public static com.example.studentchestv1001.TransferController getTransferController() {
+        return transferController;
+    }
+
     public static void setLoginController(com.example.studentchestv1001.LoginController controller) {
         AppState.loginController = controller;
     }
@@ -24,7 +29,12 @@ public class AppState {
     public static void setMainController(com.example.studentchestv1001.MainController controller) {
         AppState.mainController = controller;
     }
+
     public static void setCardSettingsController(com.example.studentchestv1001.CardSettingsController controller) {
         AppState.cardSettingsController = controller;
+    }
+
+    public static void setTransferController(com.example.studentchestv1001.TransferController transferController) {
+        AppState.transferController = transferController;
     }
 }

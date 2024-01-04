@@ -136,7 +136,6 @@ public class MainController {
             btnHistory.setDisable(settings.isCardBlocked);
             btnIBAN.setDisable(settings.isCardBlocked);
             btnWithdraw.setDisable(settings.isCardBlocked);
-            btnProfile.setDisable(settings.isCardBlocked);
         }
     }
 

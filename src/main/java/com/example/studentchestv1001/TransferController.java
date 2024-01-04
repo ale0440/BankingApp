@@ -1,3 +1,5 @@
+package com.example.studentchestv1001;
+
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
@@ -29,6 +31,8 @@ public class TransferController {
     }
 
     private void init(){
+        AppState.setTransferController(this);
+
         DatabaseConnection connectDB = new DatabaseConnection();
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
@@ -123,7 +127,7 @@ public class TransferController {
         stage.setScene(scene);
         stage.show();
 
-        AgendaController controller = loader.getController();
+        com.example.studentchestv1001.AgendaController controller = loader.getController();
         controller.setType(1);
 
 
@@ -138,7 +142,7 @@ public class TransferController {
         stage.setScene(scene);
         stage.show();
 
-        AgendaController controller = loader.getController();
+        com.example.studentchestv1001.AgendaController controller = loader.getController();
         controller.setType(2);
     }
 

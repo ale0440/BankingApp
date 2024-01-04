@@ -1,3 +1,5 @@
+package com.example.studentchestv1001;
+
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
@@ -24,7 +26,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 public class AgendaController {
     public void setType(int type){
         this.type = type;
@@ -93,7 +94,7 @@ public class AgendaController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 
-        SendMoneyController sendMoneyController = loader.getController();
+        com.example.studentchestv1001.SendMoneyController sendMoneyController = loader.getController();
         sendMoneyController.initializeData(phone, type);
     }
 

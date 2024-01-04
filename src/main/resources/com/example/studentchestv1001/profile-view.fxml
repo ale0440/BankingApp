@@ -40,7 +40,7 @@
             </Label>
          </children>
       </HBox>
-      <SplitPane dividerPositions="0.8554421768707483" layoutX="145.0" layoutY="265.0" orientation="VERTICAL" prefHeight="730.0" prefWidth="450.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="90.0">
+      <SplitPane dividerPositions="0.7857142857142857" layoutX="145.0" layoutY="265.0" orientation="VERTICAL" prefHeight="730.0" prefWidth="450.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="90.0">
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #f8c7b8;">
                <children>
@@ -116,7 +116,12 @@
             </AnchorPane>
             <AnchorPane style="-fx-background-color: #f8c7b8;">
                <children>
-                  <Button fx:id="btnUpdate" layoutX="108.0" layoutY="21.0" mnemonicParsing="false" onAction="#updateData" style="-fx-background-color: #fda285;" text="UPDATE DATA" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                  <Button fx:id="btnUpdate" layoutX="108.0" layoutY="14.0" mnemonicParsing="false" onAction="#updateData" style="-fx-background-color: #fda285;" text="UPDATE DATA" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Segoe UI Bold" size="21.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnSignOut" layoutX="130.0" layoutY="68.0" mnemonicParsing="false" onAction="#signOut" style="-fx-background-color: #fda285;" text="SIGN OUT" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font name="Segoe UI Bold" size="21.0" />
                      </font>

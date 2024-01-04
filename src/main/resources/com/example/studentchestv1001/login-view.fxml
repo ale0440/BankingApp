@@ -70,7 +70,7 @@
                   <Glow />
                </effect>
             </PasswordField>
-            <CheckBox fx:id="chRememberMe" mnemonicParsing="false" onAction="#rememberData" text="Remember me" textFill="WHITE">
+            <CheckBox fx:id="chRememberMe" mnemonicParsing="false" onAction="#rememberData" selected="true" text="Remember me" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="13.0" />
                </font>

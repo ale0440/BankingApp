@@ -1,3 +1,5 @@
+package com.example.studentchestv1001;
+
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class SendMoneyController {
     public void initializeData(String phone, int type) {
@@ -46,7 +49,10 @@ public class SendMoneyController {
             }
             else typeString = "request";
             String query = String.format("insert into transfer(account1, account2, type, amount, payment_details) values('%d','%d','%s','%f', '%s');", account1, account2, typeString, amount, payment);
-            statement.executeUpdate(query);
+            //Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            //String queryTransaction = String.format("insert into transaction(idaccount, amount, transaction_date, trader, code, address, type) values(%d, %f, '%s', '%s', '9999', 'StudentChest', '%s');", login.getId(), amount, currentTimestamp, account2Name, typeString);
+            //statement.executeUpdate(query);
+            //statement.executeUpdate(queryTransaction);
         }catch (Exception e){
             e.printStackTrace();
         }
