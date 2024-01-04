@@ -31,8 +31,8 @@ public class MainController {
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
 
-        String query = "select card_number, balance, phone from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
-        String query1 = "select card_name from card c where c.idaccount = " + login.getId();
+        String query = "select card_number, balance, phone from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idcard = a.idcard where c.idcustomer = " + login.getId();
+        String query1 = "select card_name from card where idcard = " + login.getId();
         // String query = "select first_name, last_name, card_number, balance from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
         try{
             Statement statement = connectNow.createStatement();

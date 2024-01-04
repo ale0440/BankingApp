@@ -34,7 +34,7 @@ public class CardDetailsController {
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
 
-        String query = "select balance, cvv from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idaccount = a.idaccount where c.idcustomer = " + login.getId();
+        String query = "select balance, cvv from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idcard = a.idcard where c.idcustomer = " + login.getId();
         try{
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
