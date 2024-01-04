@@ -92,9 +92,65 @@ public class IbanController {
 
             //if everything is correct, update the database
             if(ok == true){
-                System.out.println("Database to be updated");
-                //changeToMainDisplay(event);
+                updateDatabase();
+                changeToMainDisplay(event);
             }
+        }
+    }
+
+    private void updateDatabase(){
+        String details = "", phone = "", iban = "", name = "";
+        double amount = 0;
+        for(Node node : vBox.getChildren()){
+            if(node instanceof TextField){
+                TextField textField = (TextField) node;
+                String text = textField.getText();
+
+                //set the data to be inserted from each text field
+                switch (textField.getId()){
+                    case "txtSum":
+                    {
+                        amount = Double.parseDouble(text);
+                        break;
+                    }
+                    case "txtPaymentDetails":
+                    {
+                        details = text;
+                        break;
+                    }
+                    case "txtIBAN":
+                    {
+                        iban = text;
+                        break;
+                    }
+                    case "txtBeneficiaryName":
+                    {
+                        name = text;
+                        break;
+                    }
+                    case "txtPhone":
+                    {
+                        phone = text;
+                        break;
+                    }
+                    default: break;
+                }
+            }
+        }
+
+        try{
+            Statement statement = connectNow.createStatement();
+            String query = "";
+            if(chIBAN.isSelected() == true){
+                //update iban_transfer table
+                query = String.format("insert into iban_transfer(amount, payment_details, iban, beneficiary_name, idaccount) values (%f, '%s', '%s', '%s', %d);", amount, details, iban, name, login.getId());
+            } else if (chAlias.isSelected() == true) {
+                //update alias_pay_transfer table
+                query = String.format("insert into alias_pay_transfer(amount, payment_details, phone, idaccount) values (100, 'dskajd', '0123547896', 1);", amount, details, phone, login.getId());
+            }
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -115,6 +171,9 @@ public class IbanController {
             }
         } else if(txtId.equals("txtPhone") && textField.getText().length() != 10){
             showAlert("Incorrect phone number!");
+            ok = false;
+        } else if(txtId.equals("txtPaymentDetails") && textField.getText().length() > 50){
+            showAlert("Payment details exceed 50 characters!");
             ok = false;
         }
     }
