@@ -11,16 +11,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -36,22 +34,54 @@ public class AgendaController {
     }
 
     private void init(){
-        DatabaseConnection connectDB = new DatabaseConnection();
-        Connection connectNow = connectDB.getConnection();
-        LoginController login = AppState.getLoginController();
-        String query = "select first_name, last_name, phone, idcustomer from customer;";
+        //initialize the choice box
+        choiceBox.getItems().addAll(filter);
+        choiceBox.setValue(filter[0]);
+        choiceBox.setOnAction(this::setAgenda);
+        choiceBox.fireEvent(new ActionEvent(choiceBox, ActionEvent.NULL_SOURCE_TARGET));
+    }
 
-        try{
-            Statement statement = connectNow.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+    private void setAgenda(ActionEvent event){
+        Statement statement;
+        ResultSet resultSet;
+        String query = "", info = "";
+        vBox.getChildren().clear();
+        if(choiceBox.getValue().equals(filter[1])){
+            query = "select account2, count(*) as interaction_count from transfer where account1 = " + login.getId() + " " +
+                    "group by account2 " +
+                    "order by interaction_count desc;";
 
-            while(resultSet.next()){
-                String info = resultSet.getString(1) + " " + resultSet.getString(2) + "\n" + resultSet.getString(3);
-                if(resultSet.getInt(4) != login.getId())
-                    addButtonToVBox(info, resultSet.getString(3));
+            try{
+                statement = connectNow.createStatement();
+                resultSet = statement.executeQuery(query);
+                while(resultSet.next()){
+                    String query1 = "select first_name, last_name, phone from customer where idcustomer = " + resultSet.getInt(1);
+                    Statement statement1 = connectNow.createStatement();
+                    ResultSet resultSet1 = statement1.executeQuery(query1);
+                    if(resultSet1.next()){
+                        info = resultSet1.getString(1) + " " + resultSet1.getString(2) + "\n" + resultSet1.getString(3);
+                        addButtonToVBox(info, resultSet1.getString(3));
+                    }
+                }
+                statement.close();
+                resultSet.close();
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        } else if (choiceBox.getValue().equals(filter[0])) {
+            query = "select first_name, last_name, phone, idcustomer from customer order by first_name;";
+            try {
+                statement = connectNow.createStatement();
+                resultSet = statement.executeQuery(query);
+                while(resultSet.next()){
+                    if(resultSet.getInt(4) != login.getId()){
+                        info = resultSet.getString(1) + " " + resultSet.getString(2) + "\n" + resultSet.getString(3);
+                        addButtonToVBox(info, resultSet.getString(3));
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -149,5 +179,11 @@ public class AgendaController {
     private TextField txtSearch;
     @FXML
     private Button btnSearch;
+    @FXML
+    private ChoiceBox<String> choiceBox;
     private String phoneNumber;
+    private String[] filter = {"Alphabetic", "Frequently used"};
+    private DatabaseConnection connectDB = new DatabaseConnection();
+    private Connection connectNow = connectDB.getConnection();
+    private LoginController login = AppState.getLoginController();
 }
