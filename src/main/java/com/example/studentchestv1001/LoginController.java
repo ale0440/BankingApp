@@ -3,15 +3,14 @@ package com.example.studentchestv1001;
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 //import javax.xml.crypto.Data;
@@ -25,7 +24,7 @@ public class LoginController {
     }
 
     private void init(){
-
+        setSignInLabel();
         String query = "select username, password, checked from remember_me;";
 
         try{
@@ -41,6 +40,19 @@ public class LoginController {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void setSignInLabel(){
+        EventHandler<MouseEvent> clickedLabel = event -> {
+            if(event.getClickCount() == 1){
+                try {
+                    switchToSignIn(event);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        lblSignIn.setOnMouseClicked(clickedLabel);
     }
 
     public void rememberData(ActionEvent event) throws SQLException {
@@ -150,12 +162,22 @@ public class LoginController {
         return id;
     }
 
+    private void switchToSignIn(MouseEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/signin-view.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     @FXML
     private TextField txtUsername;
     @FXML
     private TextField txtPassword;
     @FXML
     public CheckBox chRememberMe;
+    @FXML
+    public Label lblSignIn;
 
     public int id;
     private String username = "", password = "";
