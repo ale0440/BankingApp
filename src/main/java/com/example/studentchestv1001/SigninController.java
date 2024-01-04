@@ -116,6 +116,12 @@ public class SigninController {
                 }
             }
         }
+
+        if(!txtConfirmPassword.equals(txtPassword)){
+            showAlert("Passwords don't match!");
+            ok = false;
+        }
+
         return ok;
     }
 

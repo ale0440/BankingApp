@@ -32,7 +32,7 @@ public class LoginController {
             ResultSet resultSet = statement.executeQuery(query);
             if(resultSet.next()){
                 if(resultSet.getBoolean(3) == true){
-                    chRememberMe.setSelected(true);
+                    //chRememberMe.setSelected(true);
                     txtUsername.setText(resultSet.getString(1));
                     txtPassword.setText(resultSet.getString(2));
                 }
@@ -139,6 +139,9 @@ public class LoginController {
                     showErrorAlert("Invalid login. Please try again!");
                 }
             }
+
+            String query = "update remember_me set checked = " + chRememberMe.isSelected();
+            statement1.executeUpdate(query);
         }catch (Exception e){
             e.printStackTrace();
         }

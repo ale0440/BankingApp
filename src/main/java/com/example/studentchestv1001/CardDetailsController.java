@@ -34,13 +34,15 @@ public class CardDetailsController {
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
 
-        String query = "select balance, cvv from account a join customer c on a.idcustomer = c.idcustomer join card ca on ca.idcard = a.idcard where c.idcustomer = " + login.getId();
+        String query = "select balance, cvv, card_number, expiry_date from account a join  card c on c.idcard = a.idcard where c.idcard = " + login.getId();
         try{
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             if(resultSet.next()){
                 balance = resultSet.getDouble(1);
                 lblCVV.setText(resultSet.getString(2));
+                lblCardNumber.setText(resultSet.getString(3));
+                lblDate.setText(resultSet.getString(4));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -98,6 +100,10 @@ public class CardDetailsController {
     private Label lblMoney;
     @FXML
     private Label  lblCVV;
+    @FXML
+    private Label  lblCardNumber;
+    @FXML
+    private Label  lblDate;
     @FXML
     private Label  lblTime;
     private double balance;
