@@ -79,6 +79,7 @@ public class TransferController {
     private void setHistory(){
         String query = "select account1, account2, type, amount, payment_details, transfer_date from transfer where account1 = " + login.getId() + " or account2 = " + login.getId();
         int index = -1;
+        int type = 0; //no delete option for label request
         try{
             //retrieve all rows from transfer table, where the current user is participant in the transfer
             Statement statement = connectNow.createStatement();
@@ -86,6 +87,7 @@ public class TransferController {
 
             String labelText;
             while(queryResult.next()){
+                type = 0;
                 labelText = "";
 
                 //set the place where the label to be added in the vbox to correspond for "newest" or for "oldest"
@@ -104,11 +106,12 @@ public class TransferController {
                         labelText += "sent to ";
                     }else{
                         labelText += "requested from ";
+                        type = 1;
                     }
                     labelText += getAccountName(queryResult.getInt(2)) + " " + queryResult.getDouble(4) + "$";
 
                     if(index >= 0 && index <= vBox.getChildren().size())
-                        addLabel(labelText, queryResult.getString(5) + "\n" + queryResult.getString(6), index);
+                        addLabel(labelText, queryResult.getString(5), queryResult.getString(6), index, type);
                 }
                 else if(queryResult.getInt(2) == login.getId()){
                     //if account2 is the logged in user's id => add a label to the anchor pane with the
@@ -118,12 +121,15 @@ public class TransferController {
                     labelText = getAccountName(queryResult.getInt(1));
                     if(queryResult.getString(3).equals("send"))
                         labelText += " sent you ";
-                    else
+                    else{
                         labelText += " requested from you ";
+                        type = 1;
+                    }
+
                     labelText += queryResult.getDouble(4) + "$";
 
                     if(index >= 0 && index <= vBox.getChildren().size())
-                        addLabel(labelText, queryResult.getString(5) + "\n" + queryResult.getString(6), index);
+                        addLabel(labelText, queryResult.getString(5), queryResult.getString(6), index, type);
                 }
             }
             statement.close();
@@ -149,7 +155,7 @@ public class TransferController {
         return name;
     }
 
-    private void addLabel(String labelText, String paymentDetails, int index){
+    private void addLabel(String labelText, String details, String date, int index, int type){
         //creating the new label
         Label label = new Label(labelText);
         label.setTextFill(Color.WHITE);
@@ -163,10 +169,31 @@ public class TransferController {
         label.setMaxHeight(60);
         label.setPrefWidth(315);
 
-        Tooltip tooltip = new Tooltip(paymentDetails);
-        Tooltip.install(label,tooltip);
+        label.setTooltip(new Tooltip(details + "\n" + date));
+
+        if(type == 1) //add option to delete the request
+        {
+            label.setOnMouseClicked(event -> {
+                deleteTransferRequest(label, date, index);
+            });
+        }
 
         vBox.getChildren().add(index, label);
+    }
+
+    private void deleteTransferRequest(Label label, String date, int index){
+        String query = "delete from transfer where transfer_date = '" + date + "'";
+        try{
+            //delete from database
+            Statement statement = connectNow.createStatement();
+            statement.executeUpdate(query);
+
+            //delete from vbox
+            vBox.getChildren().remove(index);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void selectUser(ActionEvent event, int type) throws IOException {
