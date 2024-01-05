@@ -1,3 +1,5 @@
+package com.example.studentchestv1001;
+
 import com.example.studentchestv1001.DatabaseConnection;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -117,7 +119,7 @@ public class SigninController {
             }
         }
 
-        if(!txtConfirmPassword.equals(txtPassword)){
+        if(!txtConfirmPassword.getText().equals(txtPassword.getText())){
             showAlert("Passwords don't match!");
             ok = false;
         }

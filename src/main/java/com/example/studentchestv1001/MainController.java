@@ -26,7 +26,7 @@ public class MainController {
         init();
     }
 
-    private void init(){
+    public void init(){
         setAllButtons();
 
         DatabaseConnection connectDB = new DatabaseConnection();
