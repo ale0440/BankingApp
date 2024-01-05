@@ -25,18 +25,53 @@ public class LoginController {
 
     private void init(){
         setSignInLabel();
-        String query = "select username, password, checked from remember_me;";
 
+        //set the username and password according to remember me feature
+        String query = "select username, password, checked from remember_me;";
         try{
             Statement statement = connectDB.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             if(resultSet.next()){
                 if(resultSet.getBoolean(3) == true){
-                    //chRememberMe.setSelected(true);
                     txtUsername.setText(resultSet.getString(1));
                     txtPassword.setText(resultSet.getString(2));
                 }
+                chRememberMe.setSelected(resultSet.getBoolean(3));
             }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void rememberData(ActionEvent event) throws SQLException {
+        //find if the username and password introduced are in the database
+        String query1 = "select username, password_hash from user_login";
+        boolean ok = false;
+        try{
+            Statement statement = connectDB.createStatement();
+            ResultSet resultSet = statement.executeQuery(query1);
+            while(resultSet.next() && ok == false){
+                if(resultSet.getString(1).equals(username) && resultSet.getString(2).equals(password))
+                    ok = true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(ok == true){
+            setUsernamePassword();
+            updateRememberMeTable();
+        }
+    }
+
+    private void updateRememberMeTable(){
+        int check = 1;
+        if(chRememberMe.isSelected() == false)
+            check = 0;
+        String query = String.format("update remember_me set username = '%s', password = '%s', checked = %d where id = 1;", username, password, check);
+        try{
+            Statement statement = connectDB.createStatement();
+            statement.executeUpdate(query);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -55,41 +90,6 @@ public class LoginController {
         lblSignIn.setOnMouseClicked(clickedLabel);
     }
 
-    public void rememberData(ActionEvent event) throws SQLException {
-        setUsernamePassword();
-        //find if the username and password introduced are in the database
-        String query1 = "select username, password_hash from user_login";
-        boolean ok = false;
-        try{
-            Statement statement = connectDB.createStatement();
-            ResultSet resultSet = statement.executeQuery(query1);
-            while(resultSet.next() && ok == false){
-                if(resultSet.getString(1).equals(username) && resultSet.getString(2).equals(password))
-                    ok = true;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        if(ok == true){
-            String query = String.format("update remember_me set username = '%s', password = '%s' where id = 1;", username, password);
-            try{
-                Statement statement = connectDB.createStatement();
-                statement.executeUpdate(query);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        if(chRememberMe.isSelected() == true){
-            query1 = "update remember_me set checked = true";
-
-        }else{
-            query1 = "update remember_me set checked = false";
-        }
-        Statement statement1 = connectDB.createStatement();
-        statement1.executeUpdate(query1);
-    }
-
     private void setUsernamePassword(){
         if(!txtUsername.getText().isEmpty())
             username = txtUsername.getText();
@@ -97,7 +97,7 @@ public class LoginController {
             password = txtPassword.getText();
     }
 
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
+    public void logIn(ActionEvent event) throws IOException {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
 
@@ -129,12 +129,9 @@ public class LoginController {
                 if(queryResult.getInt(1) == 1){
                     findId(statement1);
                     AppState.setLoginController(this);
-
-                    Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.show();
+                    setUsernamePassword();
+                    updateRememberMeTable();
+                    switchToMainDisplay(event);
                 }else{
                     showErrorAlert("Invalid login. Please try again!");
                 }
@@ -172,6 +169,15 @@ public class LoginController {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchToMainDisplay(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
 
     @FXML
     private TextField txtUsername;

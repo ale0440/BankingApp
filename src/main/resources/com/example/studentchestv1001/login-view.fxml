@@ -78,7 +78,7 @@
                   <Insets left="30.0" top="10.0" />
                </VBox.margin>
             </CheckBox>
-            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#changeToMainDisplay" prefHeight="34.0" prefWidth="357.0" style="-fx-background-color: #fda285;" text="LOGIN" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#logIn" prefHeight="34.0" prefWidth="357.0" style="-fx-background-color: #fda285;" text="LOGIN" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Bold" size="17.0" />
                </font>
