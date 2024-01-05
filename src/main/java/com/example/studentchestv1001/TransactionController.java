@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -36,6 +37,13 @@ public class TransactionController {
     }
 
     private void init(){
+        btnBack.setOnAction(event -> {
+            try {
+                main.changeToAnotherScene(event, "main-display-view.fxml");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         this.lblCardName.setText(main.lblCardName.getText());
         this.lblCardNumber.setText(main.lblCardNumber.getText());
         setChoiceBox();
@@ -125,21 +133,14 @@ public class TransactionController {
         return label;
     }
 
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-
     private MainController main = AppState.getMainController();
     private LoginController login = AppState.getLoginController();
     @FXML
     public Label lblCardNumber;
     @FXML
     public Label lblCardName;
+    @FXML
+    public Button btnBack;
     @FXML
     private ScrollPane scrollPane;
     @FXML

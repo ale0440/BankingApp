@@ -15,7 +15,7 @@
    <children>
       <HBox layoutX="125.0" layoutY="6.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #8a8a8b;" AnchorPane.bottomAnchor="670.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="btnProfile" mnemonicParsing="false" onAction="#switchToProfile" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
+            <Button fx:id="btnProfile" mnemonicParsing="false"  prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
@@ -81,7 +81,7 @@
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </VBox.margin>
             </SplitPane>
-            <Button fx:id="btnSeeCash" alignment="CENTER" layoutX="200.0" mnemonicParsing="false" onAction="#seeBalance" style="-fx-background-color: null;" text="See cash">
+            <Button fx:id="btnSeeCash" alignment="CENTER" layoutX="200.0" mnemonicParsing="false"  style="-fx-background-color: null;" text="See cash">
                <font>
                   <Font name="Segoe UI Bold" size="19.0" />
                </font>
@@ -99,32 +99,32 @@
                   <Insets left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
                <children>
-                  <Button fx:id="btnTransfer" layoutX="14.0" layoutY="28.0" mnemonicParsing="false" onAction="#switchToTransfer" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Transfer" textAlignment="CENTER">
+                  <Button fx:id="btnTransfer" layoutX="14.0" layoutY="28.0" mnemonicParsing="false"  prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Transfer" textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnHistory" layoutX="131.0" layoutY="28.0" mnemonicParsing="false" onAction="#switchToHistory" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="History" textAlignment="CENTER">
+                  <Button fx:id="btnHistory" layoutX="131.0" layoutY="28.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="History" textAlignment="CENTER">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnDetails" layoutX="248.0" layoutY="28.0" mnemonicParsing="false" onAction="#switchToDetails" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Card's details" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="btnDetails" layoutX="248.0" layoutY="28.0" mnemonicParsing="false"  prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Card's details" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnSettings" layoutX="14.0" layoutY="140.0" mnemonicParsing="false" onAction="#switchToSettings" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Card's settings" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="btnSettings" layoutX="14.0" layoutY="140.0" mnemonicParsing="false"  prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Card's settings" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnWithdraw" layoutX="131.0" layoutY="140.0" mnemonicParsing="false" onAction="#switchToWithdraw" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Withdraw" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="btnWithdraw" layoutX="131.0" layoutY="140.0" mnemonicParsing="false"  prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="Withdraw" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnIBAN" layoutX="248.0" layoutY="140.0" mnemonicParsing="false" onAction="#switchToIBAN" prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="IBAN Transfer" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="btnIBAN" layoutX="248.0" layoutY="140.0" mnemonicParsing="false"  prefHeight="75.0" prefWidth="108.0" style="-fx-background-color: #DEE2FF;" text="IBAN Transfer" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>

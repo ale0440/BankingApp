@@ -28,10 +28,23 @@ public class CardSettingsController {
     }
 
     private void init(){
+        //initialize buttons
+        setButton(btnBlock, true, "activ");
+        setButton(btnUnblock, false, "inactiv");
+        btnBack.setOnAction(event -> {
+            try {
+                login.switchToMainDisplay(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         try{
+            //set card data
             this.lblCardName.setText(main.lblCardName.getText());
             this.lblCardNumber.setText(main.lblCardNumber.getText());
 
+            //sest current payment limits and card name
             String query = "select card_name, payment_limit, withdraw_limit from card where idcard = " + login.getId();
             Statement statement = connectNow.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -47,41 +60,45 @@ public class CardSettingsController {
         AppState.setCardSettingsController(this);
     }
 
-    public void change(ActionEvent event) throws IOException {
-                String newCardName;
-                Double newPaymentLimit, newWithdrawLimit;
-                if(!txtCardName.getText().isEmpty())
-                    newCardName = txtCardName.getText();
-                else
-                    newCardName = txtCardName.getPromptText();
-                if(!txtPaymentLimit.getText().isEmpty())
-                    newPaymentLimit = Double.parseDouble(txtPaymentLimit.getText());
-                else
-                    newPaymentLimit = Double.parseDouble(txtPaymentLimit.getPromptText());
-                if(!txtWithdrawLimit.getText().isEmpty())
-                    newWithdrawLimit = Double.parseDouble(txtWithdrawLimit.getText());
-                else
-                    newWithdrawLimit = Double.parseDouble(txtWithdrawLimit.getPromptText());
-
-                try{
-                    String query = String.format("update card set card_name = '%s', payment_limit = %f, withdraw_limit = %f where idcard = %d;", newCardName, newPaymentLimit, newWithdrawLimit, login.getId());
-                    Statement statement = connectNow.createStatement();
-                    statement.executeUpdate(query);
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+    private void setButton(Button button, boolean isBlocked, String status){
+        button.setOnAction(event -> {
+            try {
+                cardStatus(event, isBlocked, status);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    public void blockCard(ActionEvent event) throws IOException {
-        setIsCardBlocked(true);
-        updateCardStatus("inactiv");
-        changeToMainDisplay(event);
+    private void cardStatus(ActionEvent event, boolean isBlocked, String status) throws IOException {
+        setIsCardBlocked(isBlocked);
+        updateCardStatus(status);
+        login.switchToMainDisplay(event);
     }
 
-    public void unblockCard(ActionEvent event) throws IOException {
-        setIsCardBlocked(false);
-        updateCardStatus("activ");
-        changeToMainDisplay(event);
+    public void updateDatabase(ActionEvent event) throws IOException {
+        String newCardName;
+        Double newPaymentLimit, newWithdrawLimit;
+        if(!txtCardName.getText().isEmpty())
+            newCardName = txtCardName.getText();
+        else
+            newCardName = txtCardName.getPromptText();
+        if(!txtPaymentLimit.getText().isEmpty())
+            newPaymentLimit = Double.parseDouble(txtPaymentLimit.getText());
+        else
+            newPaymentLimit = Double.parseDouble(txtPaymentLimit.getPromptText());
+        if(!txtWithdrawLimit.getText().isEmpty())
+            newWithdrawLimit = Double.parseDouble(txtWithdrawLimit.getText());
+        else
+            newWithdrawLimit = Double.parseDouble(txtWithdrawLimit.getPromptText());
+
+        try{
+            String query = String.format("update card set card_name = '%s', payment_limit = %f, withdraw_limit = %f where idcard = %d;", newCardName, newPaymentLimit, newWithdrawLimit, login.getId());
+            Statement statement = connectNow.createStatement();
+            statement.executeUpdate(query);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateCardStatus(String status){
@@ -109,14 +126,6 @@ public class CardSettingsController {
         isCardBlocked = ok;
     }
 
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
 
     @FXML
     private Button btnChangeName;
@@ -126,6 +135,8 @@ public class CardSettingsController {
     public Button btnBlock;
     @FXML
     public Button btnUnblock;
+    @FXML
+    public Button btnBack;
     @FXML
     public Label lblCardNumber;
     @FXML

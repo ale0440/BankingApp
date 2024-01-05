@@ -17,7 +17,7 @@
    <children>
       <HBox layoutX="125.0" layoutY="6.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #8a8a8b;" AnchorPane.bottomAnchor="670.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#changeToMainDisplay" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
+            <Button fx:id="btnBack" mnemonicParsing="false" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>

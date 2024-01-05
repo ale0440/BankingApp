@@ -108,7 +108,7 @@
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </VBox.margin>
             </SplitPane>
-            <Button fx:id="btnSeeCash" layoutX="200.0" mnemonicParsing="false" onAction="#seeBalance" style="-fx-background-color: null;" text="See cash">
+            <Button fx:id="btnSeeCash" layoutX="200.0"  onAction="#seeBalance"  mnemonicParsing="false" style="-fx-background-color: null;" text="See cash">
                <font>
                   <Font name="Segoe UI Bold" size="19.0" />
                </font>

@@ -27,6 +27,8 @@ public class MainController {
     }
 
     private void init(){
+        setAllButtons();
+
         DatabaseConnection connectDB = new DatabaseConnection();
         Connection connectNow = connectDB.getConnection();
         LoginController login = AppState.getLoginController();
@@ -63,6 +65,34 @@ public class MainController {
         time++;
     }
 
+    private void setButtonAction(Button button, String newScene){
+        button.setOnAction(event -> {
+            try {
+                changeToAnotherScene(event, newScene);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private void setAllButtons(){
+        btnSeeCash.setOnAction(event -> {
+            try {
+                seeBalance(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        setButtonAction(btnTransfer, "transfer-view.fxml");
+        setButtonAction(btnHistory, "history-view.fxml");
+        setButtonAction(btnDetails, "details-view.fxml");
+        setButtonAction(btnSettings, "card-settings-view.fxml");
+        setButtonAction(btnWithdraw, "withdraw-view.fxml");
+        setButtonAction(btnIBAN, "IBAN-view.fxml");
+        setButtonAction(btnProfile, "profile-view.fxml");
+    }
+
     public String maskCardNumber(String input){
         if(input != null && input.length() >=4){
             String lastFour = input.substring(input.length() - 4);
@@ -72,56 +102,8 @@ public class MainController {
             return input;
     }
 
-    public void switchToProfile(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/profile-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void switchToDetails(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/details-view.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void switchToHistory(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/history-view.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void switchToIBAN(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/IBAN-view.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void switchToTransfer(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/transfer-view.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void switchToWithdraw(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/withdraw-view.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void switchToSettings(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/card-settings-view.fxml"));
+    public void changeToAnotherScene(ActionEvent event, String newScene) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/" + newScene));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -155,6 +137,8 @@ public class MainController {
     @FXML
     public Button btnIBAN;
     @FXML
+    public Button btnSeeCash;
+    @FXML
     public Label lblCardName;
     @FXML
     public Label lblCardNumber;
@@ -167,5 +151,4 @@ public class MainController {
     public String cardNumber;
     public boolean cardBlocked = false;
     private com.example.studentchestv1001.CardSettingsController settings = AppState.getCardSettingsController();
-
 }

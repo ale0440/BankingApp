@@ -1,3 +1,4 @@
+import com.example.studentchestv1001.*;
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
 import com.example.studentchestv1001.LoginController;
@@ -11,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -34,6 +36,13 @@ public class IbanController {
     private void init(){
         chAlias.setSelected(false);
         chIBAN.setSelected(false);
+        btnBack.setOnAction(event -> {
+            try {
+                login.switchToMainDisplay(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public void checkIBAN(ActionEvent event){
@@ -95,7 +104,7 @@ public class IbanController {
             //if everything is correct, update the database
             if(ok == true){
                 updateDatabase();
-                changeToMainDisplay(event);
+                login.switchToMainDisplay(event);
             }
         }
     }
@@ -103,6 +112,7 @@ public class IbanController {
     private void updateDatabase(){
         String details = "", phone = "", iban = "", name = "";
         double amount = 0;
+
         for(Node node : vBox.getChildren()){
             if(node instanceof TextField){
                 TextField textField = (TextField) node;
@@ -153,24 +163,10 @@ public class IbanController {
             statement.executeUpdate(query);
 
             //update the balance after transaction
-            updateBalance(getBalance(login.getId()) - amount, login.getId());
+            updateBalance(main.balance - amount, login.getId());
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public double getBalance(int account){
-        double balance = 0;
-        String query = "select balance from account where idaccount = " + account;
-        try{
-            Statement statement = connectNow.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            if(resultSet.next())
-                balance = resultSet.getDouble(1);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return balance;
     }
 
     public void updateBalance(double newBalance, int account){
@@ -235,14 +231,9 @@ public class IbanController {
         vBox.getChildren().add(textField);
     }
 
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
 
+    @FXML
+    private Button btnBack;
     @FXML
     private CheckBox chIBAN;
     @FXML
@@ -256,6 +247,7 @@ public class IbanController {
     private DatabaseConnection connectDB = new DatabaseConnection();
     private Connection connectNow = connectDB.getConnection();
     private LoginController login = AppState.getLoginController();
+    private com.example.studentchestv1001.MainController main = AppState.getMainController();
     private boolean ok;
     private Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 }

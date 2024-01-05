@@ -16,7 +16,7 @@
    <children>
       <HBox layoutX="125.0" layoutY="6.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #8a8a8b;" AnchorPane.bottomAnchor="670.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#changeToMainDisplay" prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
+            <Button fx:id="btnBack" mnemonicParsing="false"  prefHeight="26.0" prefWidth="46.0" style="-fx-background-color: null;" textAlignment="CENTER">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
@@ -87,7 +87,7 @@
                   <Insets left="40.0" right="40.0" top="-10.0" />
                </VBox.margin>
                <children>
-                  <Button fx:id="btnChangeName" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#change" text="CHANGE CARD'S NAME" textFill="#7184ff">
+                  <Button fx:id="btnChangeName" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#updateDatabase" text="CHANGE CARD'S NAME" textFill="#7184ff">
                      <font>
                         <Font name="Segoe UI Bold" size="15.0" />
                      </font>
@@ -106,7 +106,7 @@
             </AnchorPane>
             <AnchorPane layoutX="50.0" layoutY="226.0" prefHeight="72.0" prefWidth="330.0" style="-fx-background-color: #c9c9c9;">
                <children>
-                  <Button fx:id="btnBlock" layoutX="14.0" layoutY="11.0" mnemonicParsing="false" onAction="#blockCard" text="BLOCK CARD" textFill="#7184ff">
+                  <Button fx:id="btnBlock" layoutX="14.0" layoutY="11.0" mnemonicParsing="false" text="BLOCK CARD" textFill="#7184ff">
                      <font>
                         <Font name="Segoe UI Bold" size="15.0" />
                      </font>
@@ -116,7 +116,7 @@
                         <Font name="Segoe UI Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnUnblock" layoutX="180.0" layoutY="11.0" mnemonicParsing="false" onAction="#unblockCard" text="UNBLOCK CARD" textFill="#7184ff">
+                  <Button fx:id="btnUnblock" layoutX="180.0" layoutY="11.0" mnemonicParsing="false" text="UNBLOCK CARD" textFill="#7184ff">
                      <font>
                         <Font name="Segoe UI Bold" size="15.0" />
                      </font>
@@ -128,7 +128,7 @@
             </AnchorPane>
             <AnchorPane layoutX="50.0" layoutY="315.0" prefHeight="210.0" prefWidth="330.0" style="-fx-background-color: #c9c9c9;">
                <children>
-                  <Button fx:id="btnLimit" layoutX="14.0" layoutY="11.0" mnemonicParsing="false" onAction="#change" text="TRANSACTIONS LIMIT" textFill="#7184ff">
+                  <Button fx:id="btnLimit" layoutX="14.0" layoutY="11.0" mnemonicParsing="false" onAction="#updateDatabase" text="TRANSACTIONS LIMIT" textFill="#7184ff">
                      <font>
                         <Font name="Segoe UI Bold" size="15.0" />
                      </font>

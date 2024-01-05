@@ -8,10 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,6 +26,13 @@ public class WithdrawController {
     }
 
     private void init(){
+        btnBack.setOnAction(event -> {
+            try {
+                login.switchToMainDisplay(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         this.lblCardName.setText(main.lblCardName.getText());
         this.lblCardNumber.setText(main.lblCardNumber.getText());
         this.lblPhone.setText(main.phone);
@@ -72,12 +76,12 @@ public class WithdrawController {
             updateDatabase(status);
         }
 
-        changeToMainDisplay(event);
+        login.switchToMainDisplay(event);
     }
 
     private void updateDatabase(String status){
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        String query = "update account set balance = " + (main.balance - amount);
+        String query = "update account set balance = " + (main.balance - amount) + " where idaccount = " + login.getId();
         String query1 = String.format("insert into withdraw(idaccount, amount, phone, status, withdraw_date) values(%d, %f, '%s', '%s', '%s');", login.getId(), amount, main.phone, status, currentTimestamp);
         try{
             Statement statement = connectNow.createStatement();
@@ -86,14 +90,6 @@ public class WithdrawController {
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/studentchestv1001/main-display-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void seeBalance(ActionEvent event) throws IOException {
@@ -108,6 +104,8 @@ public class WithdrawController {
     private int time = 0;
     private MainController main = AppState.getMainController();
     private LoginController login = AppState.getLoginController();
+    @FXML
+    public Button btnBack;
     @FXML
     public Label lblCardNumber;
     @FXML

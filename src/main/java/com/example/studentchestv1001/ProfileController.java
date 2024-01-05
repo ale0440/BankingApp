@@ -26,12 +26,11 @@ public class ProfileController {
         init();
     }
     private void init(){
-        DatabaseConnection connectDB = new DatabaseConnection();
-        Connection connectNow = connectDB.getConnection();
-        LoginController login = AppState.getLoginController();
+        setButton(btnBack, "main-display-view.fxml");
+        setButton(btnSignOut,"login-view.fxml");
+        setButtonsCardBlocked();
 
         String query = "select first_name, last_name, phone, email_address from customer where idcustomer = " + login.getId();
-        //String update = String.format() +
 
         try{
             Statement statement = connectNow.createStatement();
@@ -42,35 +41,35 @@ public class ProfileController {
                 String phone = resultSet.getString("phone");
                 String email = resultSet.getString("email_address");
 
-                if (firstName != null) {
+                if (firstName != null)
                     txtFirstName.setText(firstName);
-                } else {
-                    txtFirstName.clear();
-                }
-                //txtFirstName.setText(resultSet.getString("first_name"));
-                if (lastName != null) {
+                else txtFirstName.clear();
+                if (lastName != null)
                     txtLastName.setText(lastName);
-                } else {
-                    txtLastName.clear();
-                }
-                //txtLastName.setText(resultSet.getString("last_name"));
-                if (phone != null) {
+                else txtLastName.clear();
+                if (phone != null)
                     txtPhone.setText(phone);
-                } else {
-                    txtPhone.clear();
-                }
-                //txtPhone.setText(resultSet.getString("phone"));
-                if (email != null) {
+                else txtPhone.clear();
+                if (email != null)
                     txtEmail.setText(email);
-                } else {
-                    txtEmail.clear();
-                }
-                //txtEmail.setText(resultSet.getString("email_address"));
+                else txtEmail.clear();
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    private void setButton(Button button, String newScene){
+        button.setOnAction(event -> {
+            try {
+                controller.changeToAnotherScene(event, newScene);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private void setButtonsCardBlocked(){
         btnUpdate.setDisable(controller.cardBlocked);
         txtEmail.setEditable(!controller.cardBlocked);
         txtPhone.setEditable(!controller.cardBlocked);
@@ -78,18 +77,7 @@ public class ProfileController {
         txtFirstName.setEditable(!controller.cardBlocked);
     }
 
-    public void changeToMainDisplay(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("main-display-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
     public void updateData(ActionEvent event) throws IOException {
-        DatabaseConnection connectDB = new DatabaseConnection();
-        Connection connectNow = connectDB.getConnection();
-        LoginController login = AppState.getLoginController();
         try{
             Statement statement = connectNow.createStatement();
             String query = String.format("update customer set first_name = '%s', last_name = '%s', phone = '%s', email_address = '%s' where idcustomer = " + login.getId(), txtFirstName.getText(), txtLastName.getText(), txtPhone.getText(), txtEmail.getText());
@@ -99,13 +87,6 @@ public class ProfileController {
         }
     }
 
-    public void signOut(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("login-view.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
 
     @FXML
     private TextField txtFirstName;
@@ -117,6 +98,13 @@ public class ProfileController {
     private TextField txtEmail;
     @FXML
     private Button btnUpdate;
+    @FXML
+    private Button btnBack;
+    @FXML
+    private Button btnSignOut;
     private com.example.studentchestv1001.MainController controller = AppState.getMainController();
+    private DatabaseConnection connectDB = new DatabaseConnection();
+    private Connection connectNow = connectDB.getConnection();
+    private LoginController login = AppState.getLoginController();
 
 }

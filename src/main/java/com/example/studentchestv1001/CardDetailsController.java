@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,10 +31,6 @@ public class CardDetailsController {
 
     private void init(){
         //data initialization
-        DatabaseConnection connectDB = new DatabaseConnection();
-        Connection connectNow = connectDB.getConnection();
-        LoginController login = AppState.getLoginController();
-
         String query = "select balance, cvv, card_number, expiry_date from account a join  card c on c.idcard = a.idcard where c.idcard = " + login.getId();
         try{
             Statement statement = connectNow.createStatement();
@@ -106,8 +103,15 @@ public class CardDetailsController {
     private Label  lblDate;
     @FXML
     private Label  lblTime;
+    @FXML
+    private Button btnSeeCash;
     private double balance;
-    private int time = 0;
+    public int time = 0;
     private int remainingSeconds = 15;
     private Timeline timeline;
+
+   private DatabaseConnection connectDB = new DatabaseConnection();
+   private Connection connectNow = connectDB.getConnection();
+   private LoginController login = AppState.getLoginController();
+   private com.example.studentchestv1001.MainController main = AppState.getMainController();
 }

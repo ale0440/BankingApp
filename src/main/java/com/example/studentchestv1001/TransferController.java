@@ -116,7 +116,7 @@ public class TransferController {
 
                     //creating the string to be displayed on the label
                     labelText = getAccountName(queryResult.getInt(1));
-                    if(queryResult.getString(3) == "send")
+                    if(queryResult.getString(3).equals("send"))
                         labelText += " sent you ";
                     else
                         labelText += " requested from you ";
