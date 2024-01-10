@@ -90,7 +90,7 @@ public class LoginController {
         lblSignIn.setOnMouseClicked(clickedLabel);
     }
 
-    private void setUsernamePassword(){
+    public void setUsernamePassword(){
         if(!txtUsername.getText().isEmpty())
             username = txtUsername.getText();
         if(!txtPassword.getText().isEmpty())
@@ -180,13 +180,15 @@ public class LoginController {
 
 
     @FXML
-    private TextField txtUsername;
+    public TextField txtUsername;
     @FXML
-    private TextField txtPassword;
+    public TextField txtPassword;
     @FXML
     public CheckBox chRememberMe;
     @FXML
     public Label lblSignIn;
+    @FXML
+    public Button btnLogin;
 
     public int id;
     private String username = "", password = "";

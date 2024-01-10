@@ -27,6 +27,7 @@ public class MainController {
     }
 
     public void init(){
+        //lblMoney = new Label();
         setAllButtons();
 
         DatabaseConnection connectDB = new DatabaseConnection();
@@ -143,7 +144,7 @@ public class MainController {
     @FXML
     public Label lblCardNumber;
     @FXML
-    private Label lblMoney;
+    public Label lblMoney;
 
     public double balance;
     public String phone;

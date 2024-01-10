@@ -23,7 +23,8 @@ Available features are:
 
 -> Make transfers with other users (send or request)
 
--> See the transactions history
+-> See the transactions history (hovering the mouse cursor over the transfer text will
+reveal more information about it - date and payment details -)
 
 -> See the card details which are available for 15 seconds preview only (cvv, card number)
 

@@ -1,89 +1,64 @@
 package com.example.studentchestv1001;
 
-import com.example.studentchestv1001.AppState;
-import com.example.studentchestv1001.LoginController;
-import com.example.studentchestv1001.MainController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MainControllerTest {
+public class MainControllerTest extends ApplicationTest {
+    MainController mainController;
+    LoginController loginController;
+    FXMLLoader loader;
 
-    @Mock
-    private Connection mockConnection;
+    @Override
+    public void start(Stage stage) throws Exception {
+        loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        Parent root = loader.load();
+        loginController = loader.getController();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
-    @Mock
-    private Statement mockStatement;
+    private void goToMainDisplay() throws IOException {
+        clickOn(loginController.txtUsername).write("owen.anderson");
+        clickOn(loginController.txtPassword).write("password1");
+        clickOn(loginController.btnLogin);
 
-    @Mock
-    private ResultSet mockResultSet;
+        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("main-display-view.fxml"));
+        Parent mainRoot = mainLoader.load();
+        mainController = mainLoader.getController();
 
-    private MainController mainController;
 
-    @Before
-    public void setUp() throws Exception {
-        mainController = new MainController();
-        AppState.setMainController(mainController);
+        Platform.runLater(() -> {
+            Stage mainStage = new Stage();
+            mainStage.setScene(new Scene(mainRoot));
+            mainStage.show();
+        });
 
-        when(mockConnection.createStatement()).thenReturn(mockStatement);
-        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
     }
 
     @Test
-    public void testInit() throws Exception {
-        // Arrange
-        LoginController mockLoginController = mock(LoginController.class);
-        AppState.setLoginController(mockLoginController);
-        when(mockLoginController.getId()).thenReturn(1);
+    public void testSeeBalance() throws IOException {
+        goToMainDisplay();
+        assertEquals("$$$", mainController.lblMoney.getText());
+        mainController.balance = 100.0; // Set an initial balance
+        mainController.seeBalance(null); // Call the method once
 
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString(1)).thenReturn("1234567890123456");
-        when(mockResultSet.getDouble(2)).thenReturn(1000.0);
-        when(mockResultSet.getString(3)).thenReturn("1234567890");
+        assertEquals("100.0", mainController.lblMoney.getText()); // Check if the balance is displayed correctly
 
-        // Act
-        mainController.init();
+        mainController.balance = 150.0; // Set a different balance
+        mainController.seeBalance(null);
 
-        // Assert
-        assertEquals("****3456", mainController.lblCardNumber.getText());
-        assertEquals("1234567890", mainController.phone);
-        verify(mockStatement, times(1)).close();
-        verify(mockResultSet, times(1)).close();
+        assertEquals("$$$", mainController.lblMoney.getText());
     }
 
-    @Test
-    public void testChangeToAnotherScene() throws IOException {
-        ActionEvent mockEvent = mock(ActionEvent.class);
-        FXMLLoader mockLoader = mock(FXMLLoader.class);
-        Parent mockRoot = mock(Parent.class);
-        Stage mockStage = mock(Stage.class);
-
-       // when(mockEvent.getSource()).thenReturn(new Node());
-        when(mockLoader.load()).thenReturn(mockRoot);
-        when(mockRoot.getScene()).thenReturn(new Scene(mockRoot));
-        //when(mockStage.getScene()).thenReturn(new Scene(new Parent()));
-
-        mainController.changeToAnotherScene(mockEvent, "login-view.fxml");
-
-        verify(mockStage, times(1)).setScene(any(Scene.class));
-        verify(mockStage, times(1)).show();
-    }
 
 }
