@@ -1,3 +1,5 @@
+package com.example.studentchestv1001;
+
 import com.example.studentchestv1001.*;
 import com.example.studentchestv1001.AppState;
 import com.example.studentchestv1001.DatabaseConnection;
@@ -45,17 +47,17 @@ public class IbanController {
         });
     }
 
+    private void removeVBOX(){
+        while(vBox.getChildren().size() > 6)
+            vBox.getChildren().remove(vBox.getChildren().size() - 1);
+    }
+
     public void checkIBAN(ActionEvent event){
         //no both check boxes can be selected simultaneously
         if(chAlias.isSelected() == true)
             chAlias.setSelected(false);
 
-
-        //delete the corresponding items from checkAlias
-        if(vBox.getChildren().size() == 8){
-            for(int i = 0; i < 2; i++)
-                vBox.getChildren().remove(vBox.getChildren().size() - 1);
-        }
+        removeVBOX();
 
         //add the corresponding items for checkIBAN
         createLabel("IBAN");
@@ -70,11 +72,7 @@ public class IbanController {
         if(chIBAN.isSelected() == true)
             chIBAN.setSelected(false);
 
-        //delete the corresponding items from checkIBAN
-        if(vBox.getChildren().size() == 10){
-            for(int i = 0; i < 4; i++)
-             vBox.getChildren().remove(vBox.getChildren().size() - 1);
-        }
+        removeVBOX();
 
         //add the corresponding items for checkAlias
         createLabel("Phone Number");
